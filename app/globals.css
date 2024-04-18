@@ -13,21 +13,75 @@
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
+    --primary-color: #15161f;
+    --background-color: #f4f5fa;
   }
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  font-family: -apple-system, BlinkMacSystemFont;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+@layer base {
+  /* 通用&布局 */
+  html {
+    @apply relative scroll-pt-[88px];
+  }
+  body {
+    @apply bg-color transition-[background-color] text-primary font-normal antialiased break-words font-sans leading-relaxed relative;
+  }
+  .layout {
+    @apply max-w-2xl mx-auto pt-8 sm:pb-12 sm:pt-14 px-5 md:px-3 relative min-h-[calc(100vh-182px)] sm:min-h-[calc(100vh-152px)];
+  }
+  /* 页面背景色 */
+  .bg-color {
+    @apply bg-white dark:bg-black transition-[background-color];
+  }
+
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+      "Liberation Mono", "Courier New", monospace, ui-sans-serif, system-ui,
+      -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+      Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+      "Segoe UI Symbol", "Noto Color Emoji";
+  }
+
+  /* 文字 */
+  h1 {
+    @apply text-4xl sm:text-5xl font-semibold sm:leading-[1.2] leading-[1.2];
+  }
+  p {
+    @apply text-lg my-7 leading-[1.8];
+  }
+  .text-primary {
+    @apply text-neutral-900 dark:text-neutral-100;
+  }
+  .text-secondary {
+    @apply text-neutral-600 dark:text-neutral-300;
+  }
+  .text-tertiary {
+    @apply text-neutral-500 dark:text-neutral-400;
+  }
+  strong {
+    @apply font-semibold;
+  }
+
+  /* 分割线 */
+  hr {
+    @apply my-6 sm:my-10 border-neutral-200 dark:border-neutral-800 transition-[border-color];
+  }
+
+  /* 超链接颜色（无下划线） */
+  .link-color-none {
+    @apply text-inherit sm:hover:text-blue-700 active:text-blue-900 sm:active:text-blue-900 dark:sm:hover:text-blue-400 dark:active:text-blue-500 dark:sm:active:text-blue-500;
   }
 }
