@@ -28,7 +28,7 @@ export default function RootLayout({
       <body className={`${GeistMono.variable} ${GeistSans.variable}`}>
         <ThemeProvider attribute="class">
           <Header />
-          <main className="flex max-w-2xl mx-auto">{children}</main>
+          <main className="flex max-w-2xl mx-auto bg-gradient">{children}</main>
         </ThemeProvider>
       </body>
     </html>
