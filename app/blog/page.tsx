@@ -20,7 +20,7 @@ export default function Post() {
               <div className="text-[13px] text-tertiary mt-1">
                 {post.metadata.date}
               </div>
-              <div className="text-[17px] text-subtitle  mt-1">
+              <div className="text-[14px] text-subtitle  mt-1]">
                 {post.metadata.description || "这是一段描述一段描述"}
               </div>
             </article>
