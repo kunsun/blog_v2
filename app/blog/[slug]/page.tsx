@@ -1,14 +1,21 @@
+import { CustomMDX } from "@/components/CustomMDX";
 import { readdir, readFile } from "fs/promises";
 import matter from "gray-matter";
-import createMDX from "@next/mdx";
+import "../markdown.css";
 
 export default async function Post({ params }: { params: { slug: string } }) {
-  const content = await readFile(`./content/posts/${params.slug}.mdx`, "utf-8");
+  const content = await readFile(
+    `./content/posts/${decodeURIComponent(params.slug)}.mdx`,
+    "utf-8"
+  );
   const { data, content: mdxContent } = matter(content);
-  console.log(data, mdxContent);
   return (
     <main className="font-mono">
       <h1>{data.title}</h1>
+      <div className="text-[14px] text-tertiary mt-1">{data.date}</div>
+      <div className="markdown mt-10">
+        <CustomMDX source={mdxContent} />
+      </div>
     </main>
   );
 }

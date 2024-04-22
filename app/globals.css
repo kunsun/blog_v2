@@ -43,14 +43,14 @@ body {
 
   /* 文字 */
   h1 {
-    @apply text-4xl sm:text-6xl font-semibold sm:leading-[1.2] leading-[1.2];
+    @apply text-4xl sm:text-4xl mt-10 font-bold sm:leading-[1.2] leading-[1.2];
   }
 
   h2 {
     @apply text-3xl sm:text-2xl font-semibold sm:leading-[1.2] leading-[1.2];
   }
   p {
-    @apply text-lg mt-[12px] leading-[1.4];
+    @apply text-lg mt-[12px] leading-[1.7];
   }
   .text-primary {
     @apply text-neutral-900 dark:text-neutral-100;
