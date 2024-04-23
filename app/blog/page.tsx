@@ -21,7 +21,7 @@ export default function Post() {
                 {post.metadata.date}
               </div>
               <div className="text-[14px] text-subtitle  mt-1]">
-                {post.metadata.description || "这是一段描述一段描述"}
+                {post.metadata.description || ""}
               </div>
             </article>
           </Link>
@@ -30,5 +30,3 @@ export default function Post() {
     </main>
   );
 }
-
-const PostTitle = () => {};

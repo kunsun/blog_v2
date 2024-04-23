@@ -1,7 +1,7 @@
 "use client";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
-import HomeLink from "./HomeLink";
+import Link from "./Link";
 
 export default function Header() {
   const { resolvedTheme = "dark", setTheme, systemTheme } = useTheme();
@@ -13,20 +13,26 @@ export default function Header() {
   return (
     <div className="bg-color transition-all border-b border-[0.5px] border-neutral-100 dark:border-neutral-900 sticky h-max top-0 z-[39] ">
       <div className="relative flex justify-between items-center max-w-2xl mx-auto px-5 md:px-3 h-[60px]">
-        <div className="mt-1">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 50 50"
-            width="28"
-            height="28"
-            stroke-linejoin="round"
-            stroke-linecap="round"
-          >
-            <polygon points="25,15 10,30 40,30" fill="black" />
-            <rect x="15" y="30" width="20" height="15" fill="black" />
-          </svg>
-        </div>
-
+        <Link
+          href="/blog"
+          className="font-sans inline-block text-2xl font-black"
+        >
+          <div className="mt-1">
+            <svg viewBox="0 0 50 50" width="28" height="28">
+              <polygon
+                points="25,15 10,30 40,30"
+                fill={`${isDarkMode ? "#e2e8f0" : "black"}`}
+              />
+              <rect
+                x="15"
+                y="28"
+                width="20"
+                height="15"
+                fill={`${isDarkMode ? "#e2e8f0" : "black"}`}
+              />
+            </svg>
+          </div>
+        </Link>
         {mounted && (
           <div
             style={{ position: "relative", width: "28px", height: "28px" }}

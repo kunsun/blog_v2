@@ -47,7 +47,7 @@ body {
   }
 
   h2 {
-    @apply text-3xl sm:text-2xl font-semibold sm:leading-[1.2] leading-[1.2];
+    @apply text-2xl sm:text-2xl font-semibold sm:leading-[1.2] leading-[1.2];
   }
   p {
     @apply text-lg mt-[12px] leading-[1.7];
