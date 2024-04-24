@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "export": "next export",
-    "deploy": "gh-pages -d out -b master -r git@github.com:kunsun/kunsun.github.io.git"
+    "deploy": "next build && gh-pages -d out -b master -t true -r git@github.com:kunsun/kunsun.github.io.git"
   },
   "dependencies": {
     "geist": "^1.3.0",
