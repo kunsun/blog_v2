@@ -13,26 +13,28 @@ export default function Header() {
   return (
     <div className="bg-color transition-all border-b border-[0.5px] border-neutral-100 dark:border-neutral-900 sticky h-max top-0 z-[39] ">
       <div className="relative flex justify-between items-center max-w-2xl mx-auto px-5 md:px-3 h-[60px]">
-        <Link
-          href="/blog"
-          className="font-sans inline-block text-2xl font-black"
-        >
-          <div className="mt-1">
-            <svg viewBox="0 0 50 50" width="28" height="28">
-              <polygon
-                points="25,15 10,30 40,30"
-                fill={`${isDarkMode ? "#e2e8f0" : "black"}`}
-              />
-              <rect
-                x="15"
-                y="28"
-                width="20"
-                height="15"
-                fill={`${isDarkMode ? "#e2e8f0" : "black"}`}
-              />
-            </svg>
-          </div>
-        </Link>
+        {mounted && (
+          <Link
+            href="/blog"
+            className="font-sans inline-block text-2xl font-black"
+          >
+            <div className="mt-1">
+              <svg viewBox="0 0 50 50" width="28" height="28">
+                <polygon
+                  points="25,15 10,30 40,30"
+                  fill={`${isDarkMode ? "#e2e8f0" : "black"}`}
+                />
+                <rect
+                  x="15"
+                  y="28"
+                  width="20"
+                  height="15"
+                  fill={`${isDarkMode ? "#e2e8f0" : "black"}`}
+                />
+              </svg>
+            </div>
+          </Link>
+        )}
         {mounted && (
           <div
             style={{ position: "relative", width: "28px", height: "28px" }}

@@ -64,70 +64,70 @@ width=device-width; 布局视图等于理想视图
 ```js
 !(function (e, t) {
   var n = t.documentElement,
-    d = e.devicePixelRatio || 1
+    d = e.devicePixelRatio || 1;
   function i() {
-    var e = n.clientWidth / 3.75
-    n.style.fontSize = e + "px"
+    var e = n.clientWidth / 3.75;
+    n.style.fontSize = e + "px";
   }
   if (
     ((function e() {
       t.body
         ? (t.body.style.fontSize = "16px")
-        : t.addEventListener("DOMContentLoaded", e)
+        : t.addEventListener("DOMContentLoaded", e);
     })(),
     i(),
     e.addEventListener("resize", i),
     e.addEventListener("pageshow", function (e) {
-      e.persisted && i()
+      e.persisted && i();
     }),
     2 <= d)
   ) {
     var o = t.createElement("body"),
-      a = t.createElement("div")
-    ;(a.style.border = ".5px solid transparent"),
+      a = t.createElement("div");
+    (a.style.border = ".5px solid transparent"),
       o.appendChild(a),
       n.appendChild(o),
       1 === a.offsetHeight && n.classList.add("hairlines"),
-      n.removeChild(o)
+      n.removeChild(o);
   }
-})(window, document)
+})(window, document);
 
 !(function (e, t) {
   var n = t.documentElement,
-    d = e.devicePixelRatio || 1
+    d = e.devicePixelRatio || 1;
 
   function i() {
-    var e = n.clientWidth / 3.75
-    n.style.fontSize = e + "px"
+    var e = n.clientWidth / 3.75;
+    n.style.fontSize = e + "px";
   }
   //
   if (
     ((function e() {
       t.body
         ? (t.body.style.fontSize = "16px")
-        : t.addEventListener("DOMContentLoaded", e)
+        : t.addEventListener("DOMContentLoaded", e);
     })(),
     i(),
     e.addEventListener("resize", i),
     e.addEventListener("pageshow", function (e) {
-      e.persisted && i()
+      e.persisted && i();
     }),
     2 <= d)
   ) {
     var o = t.createElement("body"),
-      a = t.createElement("div")
-    ;(a.style.border = ".5px solid transparent"),
+      a = t.createElement("div");
+    (a.style.border = ".5px solid transparent"),
       o.appendChild(a),
       n.appendChild(o),
       1 === a.offsetHeight && n.classList.add("hairlines"),
-      n.removeChild(o)
+      n.removeChild(o);
   }
-})(window, document)
+})(window, document);
 ```
 
 ### REM 总结
 
 要显示小于 1px 的边框，有两张方案：
 
-1. 使用 drp 重新修改<meta name="viewport" content="width=device-width; initial-scale=1/dpr, maximum-scale=1/dpr" >
+1. 使用 drp 重新修改<meta name="viewport" content="width=device-width; initial-scale=1/dpr, maximum-scale=1/dpr" />
 2. 或者使用 CSS ::before background-image:linear-greadient();

@@ -22,6 +22,6 @@ export default async function Post({ params }: { params: { slug: string } }) {
 
 export async function generateStaticParams() {
   const entries = await readdir("./content/posts", { withFileTypes: true });
-  const dirs = entries.map((entry) => entry.name);
+  const dirs = entries.map((entry) => entry.name.replace(/\.mdx$/, ""));
   return dirs.map((dir) => ({ slug: dir }));
 }
