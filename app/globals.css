@@ -49,6 +49,9 @@ body {
   h2 {
     @apply text-2xl sm:text-2xl font-semibold sm:leading-[1.2] leading-[1.2];
   }
+  h3 {
+    word-break: break-all
+  }
   p {
     @apply text-lg mt-[12px] leading-[1.7];
   }
