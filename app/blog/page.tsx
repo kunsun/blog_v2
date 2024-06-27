@@ -6,7 +6,7 @@ export default function Post() {
 
   return (
     <main className="font-mono pb-20 w-2xl">
-      <div className="mt-6">
+      <div className="mt-3">
         {posts.map((post) => (
           <Link
             key={post.slug}
@@ -14,7 +14,7 @@ export default function Post() {
             href={"/blog/" + post.slug + "/"}
           >
             <article key={post.slug} className="group my-2">
-              <div className="group-hover:underline font-extrabold text-[14px]">
+              <div className="group-hover:underline font-[600] text-[14px]">
                 {post.metadata.title}
               </div>
               <div className="text-[13px] text-tertiary mt-1">

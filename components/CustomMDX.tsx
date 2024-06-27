@@ -5,10 +5,16 @@ import React from "react";
 
 const components = {
   h1: (props: any) => {
-    return <h1 className="text-4xl font-bold text-center">{props.children}</h1>;
+    return <h1>{props.children}</h1>;
   },
   h2: (props: any) => {
     return <h2>{props.children}</h2>;
+  },
+  p: (props: any) => {
+    return <p className="text-[14px] text-neutral-100">{props.children}</p>;
+  },
+  code: (props: any) => {
+    return <code className="text-sm p-1">{props.children}</code>;
   },
 };
 

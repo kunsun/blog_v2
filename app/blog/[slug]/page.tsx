@@ -1,7 +1,6 @@
 import { CustomMDX } from "@/components/CustomMDX";
 import { readdir, readFile } from "fs/promises";
 import matter from "gray-matter";
-import "../markdown.css";
 
 export default async function Post({ params }: { params: { slug: string } }) {
   const content = await readFile(
@@ -23,5 +22,5 @@ export default async function Post({ params }: { params: { slug: string } }) {
 export async function generateStaticParams() {
   const entries = await readdir("./content/posts", { withFileTypes: true });
   const dirs = entries.map((entry) => entry.name.replace(/\.mdx$/, ""));
-  return dirs.map((dir) => ({ slug: dir }));
+  return dirs.map((dir) => ({ slug: encodeURIComponent(dir) }));
 }

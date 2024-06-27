@@ -43,11 +43,11 @@ body {
 
   /* 文字 */
   h1 {
-    @apply text-4xl sm:text-4xl mt-10 font-bold sm:leading-[1.2] leading-[1.2];
+    @apply text-4xl sm:text-4xl mt-10 font-bold sm:leading-[1.2] leading-[1.2] text-4xl mt-10 font-bold text-neutral-800 dark:text-neutral-300;
   }
 
   h2 {
-    @apply text-2xl sm:text-2xl font-semibold sm:leading-[1.2] leading-[1.2];
+    @apply font-semibold sm:leading-[1.2] leading-[1.2];
   }
   h3 {
     word-break: break-all
@@ -65,7 +65,7 @@ body {
     @apply text-neutral-500 dark:text-neutral-500;
   }
   .text-subtitle {
-    @apply text-neutral-700 dark:text-neutral-200;
+    @apply text-neutral-500 dark:text-neutral-100;
   }
   strong {
     @apply font-semibold;
@@ -75,13 +75,13 @@ body {
     background: radial-gradient(ellipse 70% 50% at 50% -22%, #777ac636, #0000);
   }
 
-  /* 分割线 */
-  hr {
-    @apply my-6 sm:my-10 border-neutral-200 dark:border-neutral-800 transition-[border-color];
+  .markdown {
+    h2 {
+      @apply text-[16px] mt-8 mb-4 font-bold;
+    }
+    p {
+      @apply text-[16px] text-neutral-600 dark:text-neutral-300 my-4;
+    }
   }
 
-  /* 超链接颜色（无下划线） */
-  .link-color-none {
-    @apply text-inherit sm:hover:text-blue-700 active:text-blue-900 sm:active:text-blue-900 dark:sm:hover:text-blue-400 dark:active:text-blue-500 dark:sm:active:text-blue-500;
-  }
 }

@@ -12,18 +12,15 @@ export default function Header() {
 
   useEffect(() => setMounted(true), []);
   return (
-    <div className="bg-color border-neutral-100 dark:border-neutral-900 h-max  relative flex justify-between items-center mx-2 px-4 md:px-3 h-[60px]">
-      {mounted && (
-        <Link
-          href="/blog"
-          className="font-sans inline-block text-2xl font-black"
-        >
-          <div className="mt-1 flex items-center max-w-2xl">
+    <div className="bg-color border-neutral-100 dark:border-neutral-900 h-max  relative flex justify-between items-center mx-2 px-2 md:px-3 h-[60px]">
+      {
+        <Link href="/" className="font-sans inline-block text-2xl font-black">
+          <div className="mt-3 flex items-center max-w-2xl">
             <Image src="/logo_2.png" width={28} height={28} alt="" />
             <div className="text-[16px] ml-[4px] font-mono">kunsun</div>
           </div>
         </Link>
-      )}
+      }
       {mounted && (
         <div
           style={{ position: "relative", width: "28px", height: "28px" }}
