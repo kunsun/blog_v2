@@ -11,10 +11,14 @@
     "publish": "gh-pages -d out -b master -t true -r git@github.com:kunsun/kunsun.github.io.git"
   },
   "dependencies": {
+    "@mdx-js/loader": "^3.0.1",
+    "@mdx-js/react": "^3.0.1",
+    "@next/mdx": "^14.2.4",
     "@tailwindcss/nesting": "0.0.0-insiders.565cd3e",
+    "@types/mdx": "^2.0.13",
     "geist": "^1.3.0",
     "gray-matter": "^4.0.3",
-    "next": "14.2.1",
+    "next": "14.2.4",
     "next-mdx-remote": "^4.4.1",
     "next-themes": "^0.3.0",
     "react": "^18",

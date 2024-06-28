@@ -11,7 +11,11 @@ const components = {
     return <h2>{props.children}</h2>;
   },
   p: (props: any) => {
-    return <p className="text-[14px] text-neutral-100">{props.children}</p>;
+    return (
+      <p className="text-[14px] text-neutral-100 dark:text-neutral-800 ">
+        {props.children}
+      </p>
+    );
   },
   code: (props: any) => {
     return <code className="text-sm p-1">{props.children}</code>;

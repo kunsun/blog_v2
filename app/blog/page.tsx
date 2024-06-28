@@ -11,7 +11,7 @@ export default function Post() {
           <Link
             key={post.slug}
             className="block py-[12px] px-5  hover:scale-[1.005]"
-            href={"/blog/" + post.slug + "/"}
+            href={"/blog/" + decodeURIComponent(post.slug) + "/"}
           >
             <article key={post.slug} className="group my-2">
               <div className="group-hover:underline font-[600] text-[14px]">

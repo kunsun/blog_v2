@@ -3,10 +3,7 @@ import { readdir, readFile } from "fs/promises";
 import matter from "gray-matter";
 
 export default async function Post({ params }: { params: { slug: string } }) {
-  const content = await readFile(
-    `./content/posts/${decodeURIComponent(params.slug)}.mdx`,
-    "utf-8"
-  );
+  const content = await readFile(`./posts/${params.slug}/index.mdx`, "utf-8");
   const { data, content: mdxContent } = matter(content);
   return (
     <main className="font-mono">
@@ -20,7 +17,9 @@ export default async function Post({ params }: { params: { slug: string } }) {
 }
 
 export async function generateStaticParams() {
-  const entries = await readdir("./content/posts", { withFileTypes: true });
+  const entries = await readdir("./posts", { withFileTypes: true });
   const dirs = entries.map((entry) => entry.name.replace(/\.mdx$/, ""));
-  return dirs.map((dir) => ({ slug: encodeURIComponent(dir) }));
+  return dirs.map((dir) => ({
+    slug: dir,
+  }));
 }
