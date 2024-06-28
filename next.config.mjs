@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // assetPrefix: process.env.NODE_ENV === "production" ? "/" : "",
-  // output: "export",
+  output: "export",
   images: { unoptimized: true },
 };
 
