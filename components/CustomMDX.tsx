@@ -1,6 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkSmartpants from "remark-smartypants";
+import rehypePrettyCode from "rehype-pretty-code";
+import darkPlus from "tm-themes/themes/dark-plus.json";
+import { remarkMdxEvalCodeBlock } from "./mdx.js";
 import React from "react";
 
 const components = {
@@ -22,6 +26,26 @@ const components = {
   },
 };
 
-export function CustomMDX(props: any) {
-  return <MDXRemote {...props} components={{ ...components }} />;
+export function CustomMDX({ filename, source, postComponents }: any) {
+  console.log({ postComponents, filename });
+  return (
+    <MDXRemote
+      source={source}
+      components={{ ...components, ...postComponents }}
+      options={{
+        mdxOptions: {
+          useDynamicImport: true,
+          remarkPlugins: [remarkSmartpants, [remarkMdxEvalCodeBlock, filename]],
+          rehypePlugins: [
+            [
+              rehypePrettyCode,
+              {
+                theme: darkPlus,
+              },
+            ],
+          ],
+        },
+      }}
+    />
+  );
 }

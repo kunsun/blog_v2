@@ -3,16 +3,30 @@ import { readdir, readFile } from "fs/promises";
 import matter from "gray-matter";
 
 export default async function Post({ params }: { params: { slug: string } }) {
-  const content = await readFile(`./posts/${params.slug}/index.mdx`, "utf-8");
+  const filename = `./posts/${params.slug}/index.mdx`;
+  const content = await readFile(filename, "utf-8");
+  let postComponents = {};
+  try {
+    postComponents = await import("@posts/" + params.slug + "/components.js");
+  } catch (e) {
+    if (!e || e.code !== "MODULE_NOT_FOUND") {
+      throw e;
+    }
+  }
+  console.log(postComponents);
   const { data, content: mdxContent } = matter(content);
   return (
-    <main className="font-mono">
+    <article className="font-mono">
       <h1>{data.title}</h1>
       <div className="text-[14px] text-tertiary mt-1">{data.date}</div>
-      <div className="markdown mt-10">
-        <CustomMDX source={mdxContent} />
+      <div className="markdown markdown-body mt-10">
+        <CustomMDX
+          source={mdxContent}
+          filename={filename}
+          postComponents={postComponents}
+        />
       </div>
-    </main>
+    </article>
   );
 }
 
