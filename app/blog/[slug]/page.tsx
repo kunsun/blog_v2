@@ -8,12 +8,11 @@ export default async function Post({ params }: { params: { slug: string } }) {
   let postComponents = {};
   try {
     postComponents = await import("@posts/" + params.slug + "/components.js");
-  } catch (e) {
+  } catch (e: any) {
     if (!e || e.code !== "MODULE_NOT_FOUND") {
       throw e;
     }
   }
-  console.log(postComponents);
   const { data, content: mdxContent } = matter(content);
   return (
     <article className="font-mono">

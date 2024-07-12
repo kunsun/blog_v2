@@ -27,7 +27,6 @@ const components = {
 };
 
 export function CustomMDX({ filename, source, postComponents }: any) {
-  console.log({ postComponents, filename });
   return (
     <MDXRemote
       source={source}
@@ -35,14 +34,17 @@ export function CustomMDX({ filename, source, postComponents }: any) {
       options={{
         mdxOptions: {
           useDynamicImport: true,
-          remarkPlugins: [remarkSmartpants, [remarkMdxEvalCodeBlock, filename]],
+          remarkPlugins: [
+            [remarkSmartpants],
+            [remarkMdxEvalCodeBlock, filename] as any,
+          ],
           rehypePlugins: [
             [
               rehypePrettyCode,
               {
                 theme: darkPlus,
               },
-            ],
+            ] as any,
           ],
         },
       }}
