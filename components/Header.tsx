@@ -37,6 +37,12 @@ export default function Header() {
           作品
         </Link>
         <Link
+          href="/resume"
+          className="text-sm font-mono hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+        >
+          简历
+        </Link>
+        <Link
           href="/ssr-test"
           className="text-sm font-mono hover:text-green-600 dark:hover:text-green-400 transition-colors"
         >
@@ -46,12 +52,18 @@ export default function Header() {
 
       <div className="flex items-center space-x-4">
         {/* 移动端菜单 */}
-        <nav className="md:hidden flex items-center space-x-4">
+        <nav className="md:hidden flex items-center space-x-3">
           <Link
             href="/blog"
             className="text-xs font-mono hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
           >
             博客
+          </Link>
+          <Link
+            href="/resume"
+            className="text-xs font-mono hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+          >
+            简历
           </Link>
           <Link
             href="/ssr-test"
