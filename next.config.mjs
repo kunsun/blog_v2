@@ -10,6 +10,16 @@ const nextConfig = {
     unoptimized: true  // 或者可以移除这行让Vercel处理图片优化
   },
   
+  // 添加重写规则，让/resume直接访问静态HTML
+  async rewrites() {
+    return [
+      {
+        source: '/resume',
+        destination: '/resume/index.html',
+      },
+    ];
+  },
+  
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     config.resolve.alias['@posts'] = path.join(process.cwd(), 'posts');
     return config;
