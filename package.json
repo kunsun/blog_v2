@@ -6,9 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "deploy": "next build && gh-pages -d out -b master -t true -r git@github.com:kunsun/kunsun.github.io.git",
-    "publish": "gh-pages -d out -b master -t true -r git@github.com:kunsun/kunsun.github.io.git"
+    "lint": "next lint"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.0.1",
