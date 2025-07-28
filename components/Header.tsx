@@ -31,22 +31,10 @@ export default function Header() {
           博客
         </Link>
         <Link
-          href="/works"
-          className="text-sm font-mono hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-        >
-          作品
-        </Link>
-        <Link
           href="/resume"
           className="text-sm font-mono hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
         >
           简历
-        </Link>
-        <Link
-          href="/ssr-test"
-          className="text-sm font-mono hover:text-green-600 dark:hover:text-green-400 transition-colors"
-        >
-          SSR测试
         </Link>
       </nav>
 
@@ -64,12 +52,6 @@ export default function Header() {
             className="text-xs font-mono hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
           >
             简历
-          </Link>
-          <Link
-            href="/ssr-test"
-            className="text-xs font-mono hover:text-green-600 dark:hover:text-green-400 transition-colors"
-          >
-            SSR
           </Link>
         </nav>
 
