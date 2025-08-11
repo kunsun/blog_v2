@@ -18,7 +18,9 @@ export default function Post() {
                 {post.metadata.title}
               </div>
               <div className="text-[13px] text-tertiary mt-1">
-                {post.metadata.date}
+                {typeof post.metadata.date === "string"
+                  ? post.metadata.date
+                  : new Date(post.metadata.date).toLocaleDateString()}
               </div>
               <div className="text-[14px] text-subtitle mt-1">
                 {post.metadata.description || ""}

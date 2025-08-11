@@ -4,8 +4,11 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkSmartpants from "remark-smartypants";
 import rehypePrettyCode from "rehype-pretty-code";
 import darkPlus from "tm-themes/themes/dark-plus.json";
+import githubLight from "tm-themes/themes/github-light-default.json";
 import { remarkMdxEvalCodeBlock } from "./mdx.js";
 import React from "react";
+import { Tag } from "./Tag";
+import { EnhancedCodeBlock } from "./EnhancedCodeBlock";
 
 const components = {
   h1: (props: any) => {
@@ -19,9 +22,20 @@ const components = {
   code: (props: any) => {
     return <code className="text-sm p-1">{props.children}</code>;
   },
+  pre: (props: any) => {
+    // 如果 pre 包含 data-rehype-pretty-code-fragment，保持原样
+    if (props["data-rehype-pretty-code-fragment"] !== undefined) {
+      return <pre {...props} />;
+    }
+    // 否则使用增强的代码块
+    return <EnhancedCodeBlock>{props.children}</EnhancedCodeBlock>;
+  },
+  Tag,
+  EnhancedCodeBlock,
 };
 
 export function CustomMDX({ filename, source, postComponents }: any) {
+  const theme = { dark: darkPlus, light: githubLight } as any;
   return (
     <MDXRemote
       source={source}
@@ -37,7 +51,8 @@ export function CustomMDX({ filename, source, postComponents }: any) {
             [
               rehypePrettyCode,
               {
-                theme: darkPlus,
+                theme,
+                keepBackground: false,
               },
             ] as any,
           ],

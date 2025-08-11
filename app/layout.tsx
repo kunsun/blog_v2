@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import Header from "@/components/Header";
+import ReadingProgress from "@/components/ReadingProgress";
+import CodeEnhancer from "@/components/CodeEnhancer";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -22,10 +24,12 @@ export default function RootLayout({
           enableSystem={false}
           defaultTheme="light"
         >
+          <ReadingProgress />
           <Header />
           <main className="flex max-w-2xl w-full mx-auto bg-gradient px-4 sm:px-6">
             {children}
           </main>
+          <CodeEnhancer />
         </ThemeProvider>
       </body>
     </html>

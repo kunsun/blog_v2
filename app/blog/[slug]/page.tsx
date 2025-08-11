@@ -18,7 +18,11 @@ export default async function Post({ params }: { params: { slug: string } }) {
   return (
     <article className="font-mono w-full min-w-0">
       <h1>{data.title}</h1>
-      <div className="text-[14px] text-tertiary mt-1">{data.date}</div>
+      <div className="text-[14px] text-tertiary mt-1">
+        {typeof data.date === "string"
+          ? data.date
+          : new Date(data.date).toLocaleDateString()}
+      </div>
       {/* 同时保留原有 markdown 类，增加 markdown-body 以激活 markdown.css */}
       <div className="markdown markdown-body mt-10 w-full overflow-hidden">
         <CustomMDX
