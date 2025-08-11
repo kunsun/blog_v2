@@ -14,13 +14,8 @@ const components = {
   h2: (props: any) => {
     return <h2>{props.children}</h2>;
   },
-  p: (props: any) => {
-    return (
-      <p className="text-[14px] text-neutral-100 dark:text-neutral-800 ">
-        {props.children}
-      </p>
-    );
-  },
+  // 让外部 markdown-body / .markdown 样式接管段落排版，避免颜色冲突
+  p: (props: any) => <p>{props.children}</p>,
   code: (props: any) => {
     return <code className="text-sm p-1">{props.children}</code>;
   },
