@@ -1,68 +1,90 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-    --primary-color: #15161f;
-    --background-color: #f4f5fa;
-  }
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont;
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-}
+@import "tailwindcss";
 
 @layer base {
   /* 通用&布局 */
   html {
-    @apply relative scroll-pt-[88px];
+    position: relative;
+    scroll-padding-top: 88px;
   }
   body {
-    @apply bg-color transition-[background-color] text-primary font-normal antialiased break-words font-sans leading-relaxed relative;
+    background-color: white;
+    color: rgb(23 23 23);
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    word-break: break-words;
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    line-height: 1.625;
+    position: relative;
+    transition-property: background-color;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
   }
-  /* 页面背景色 */
-  .bg-color {
-    @apply bg-white dark:bg-black transition-[background-color];
+  
+  /* 使用 .dark 代替系统 prefers-color-scheme，便于 next-themes 手动切换 */
+  .dark body {
+    background-color: black;
+    color: rgb(245 245 245);
   }
 
   /* 文字 */
   h1 {
-    @apply text-4xl sm:text-4xl mt-10 font-bold sm:leading-[1.2] leading-[1.2] text-4xl mt-10 font-bold text-neutral-800 dark:text-neutral-300;
+    font-size: 2.25rem;
+    margin-top: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: rgb(38 38 38);
+  }
+  
+  @media (min-width: 640px) {
+    h1 {
+      font-size: 2.25rem;
+      line-height: 1.2;
+    }
+  }
+  
+  .dark h1 {
+    color: rgb(212 212 212);
   }
 
   p {
-    @apply text-lg mt-[12px] leading-[1.7];
+    font-size: 1.125rem;
+    margin-top: 12px;
+    line-height: 1.7;
   }
+  
   .text-primary {
-    @apply text-neutral-900 dark:text-neutral-100;
+    color: rgb(23 23 23);
+  }
+  
+  .dark .text-primary {
+    color: rgb(245 245 245);
   }
   .text-secondary {
-    @apply text-neutral-600 dark:text-neutral-300;
+    color: rgb(82 82 82);
   }
+  
+  .dark .text-secondary {
+    color: rgb(212 212 212);
+  }
+  
   .text-tertiary {
-    @apply text-neutral-500 dark:text-neutral-500;
+    color: rgb(115 115 115);
   }
+  
+  .dark .text-tertiary {
+    color: rgb(115 115 115);
+  }
+  
   .text-subtitle {
-    @apply text-neutral-500 dark:text-neutral-100;
+    color: rgb(115 115 115);
   }
+  
+  .dark .text-subtitle {
+    color: rgb(245 245 245);
+  }
+  
   strong {
-    @apply font-semibold;
+    font-weight: 600;
   }
 
   .dark .bg-gradient {
