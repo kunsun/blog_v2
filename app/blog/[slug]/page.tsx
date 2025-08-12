@@ -1,4 +1,5 @@
 import { CustomMDX } from "@/components/CustomMDX";
+import "./markdown.css"; // 引入 GitHub 风格 markdown 样式
 import { readdir, readFile } from "fs/promises";
 import matter from "gray-matter";
 
@@ -15,10 +16,15 @@ export default async function Post({ params }: { params: { slug: string } }) {
   }
   const { data, content: mdxContent } = matter(content);
   return (
-    <article className="font-mono">
+    <article className="font-mono w-full min-w-0">
       <h1>{data.title}</h1>
-      <div className="text-[14px] text-tertiary mt-1">{data.date}</div>
-      <div className="markdown markdown-body mt-10">
+      <div className="text-[14px] text-tertiary mt-1">
+        {typeof data.date === "string"
+          ? data.date
+          : new Date(data.date).toLocaleDateString()}
+      </div>
+      {/* 同时保留原有 markdown 类，增加 markdown-body 以激活 markdown.css */}
+      <div className="markdown markdown-body mt-10 w-full overflow-hidden">
         <CustomMDX
           source={mdxContent}
           filename={filename}

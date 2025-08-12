@@ -1,0 +1,260 @@
+---
+title: 样式综合测试 Style Demo
+date: 2025-08-11
+summary: 用于验证 markdown、列表、任务列表、表格、代码高亮、引用、内联代码、脚注、图片、标签、提醒块等渲染效果。
+---
+
+# 样式综合测试 Style Demo
+
+> 本文用于快速回归排版 / 主题 / 代码高亮。修改样式后刷新此页面检查。（可复制到新分支验证）
+
+## 段落 & 强调
+
+普通段落文字，用于测试行高、字间距、中文与 English 混排表现。Second paragraph with some `inline code` 与 **加粗**、_斜体_、**_粗斜体_**、~~删除线~~ 以及一段 `const fn = () => {}`。
+
+自适应换行 + URL: https://example.com/path/to/resource?foo=bar&baz=qux
+
+标记文字：这是 <mark>重点标记 mark</mark> 示例；以及 <kbd>⌘</kbd> + <kbd>K</kbd> 组合键展示。
+
+## 列表 Lists
+
+### 无序列表
+- 第一项 (含内联代码 `Array.map`)
+- 第二项
+  - 嵌套子项 A
+  - 嵌套子项 B
+- 第三项
+
+### 有序列表
+1. Step one
+2. Step two
+   1. Sub step a
+   2. Sub step b
+3. Step three
+
+### 任务列表 Task List
+- [x] 已完成任务一
+- [ ] 待完成任务二
+- [ ] 待办任务三
+  - [x] 子任务已完成
+  - [ ] 子任务未完成
+
+## 引用 Blockquote
+
+> 多行引用第一行
+> 第二行继续引用，**强调**，以及 `inline` 代码。
+
+## 代码 Code Blocks
+
+### JavaScript / TypeScript
+```ts title="example.ts" line-numbers
+import type { FC } from 'react';
+
+interface User {
+  id: number;
+  name: string;
+  roles?: string[];
+}
+
+const fetchUser = async (id: number): Promise<User> => {
+  const res = await fetch(`/api/user/${id}`);
+  if (!res.ok) throw new Error('Network');
+  return res.json();
+};
+
+export const Component: FC = () => {
+  const sum = (a: number, b: number) => a + b; // highlight-next-line
+  console.log('sum', sum(1, 2));
+  return <div data-role="user" aria-live="polite">Hello <span>User</span></div>;
+};
+```
+
+### Rust
+```rust line-numbers
+fn main() {
+    let nums = vec![1,2,3];
+    let doubled: Vec<i32> = nums.iter().map(|x| x * 2).collect();
+    println!("{:?}", doubled);
+}
+```
+
+### JSON (复制按钮测试)
+```json
+{
+  "name": "demo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {"build": "echo build"}
+}
+```
+
+### Diff / Patch
+```diff
+@@ add util
++ export function add(a, b) {
++   return a + b; // TODO: 精度
++ }
+```
+
+### 行高亮 (手动标记示例)
+```js
+// highlight-start
+function critical() {
+  return process.env.SECRET ?? 'fallback';
+}
+// highlight-end
+```
+
+### 代码块标题和行号
+```js title="utils.js" {1,3} showLineNumbers
+function add(a, b) {
+  return a + b;
+}
+
+function multiply(a, b) {
+  return a * b;
+}
+
+export { add, multiply };
+```
+
+### TypeScript 示例
+```typescript showLineNumbers
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  age?: number;
+  isActive: boolean;
+}
+
+class UserService {
+  private users: User[] = [];
+  
+  addUser(user: User): void {
+    this.users.push(user);
+  }
+  
+  findById(id: string): User | undefined {
+    return this.users.find(u => u.id === id);
+  }
+}
+```
+
+### React 组件示例
+```tsx title="Button.tsx" showLineNumbers
+import React from 'react';
+
+interface ButtonProps {
+  variant?: 'primary' | 'secondary';
+  children: React.ReactNode;
+  onClick?: () => void;
+}
+
+export const Button: React.FC<ButtonProps> = ({ 
+  variant = 'primary', 
+  children, 
+  onClick 
+}) => {
+  return (
+    <button 
+      className={`btn btn-${variant}`}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  );
+};
+```
+
+### 增强代码块组件测试
+
+<EnhancedCodeBlock title="API 服务示例" language="typescript">
+{`interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+  timestamp: number;
+}
+
+class ApiService {
+  private baseUrl: string;
+  
+  constructor(baseUrl: string) {
+    this.baseUrl = baseUrl;
+  }
+  
+  async get<T>(endpoint: string): Promise<ApiResponse<T>> {
+    try {
+      const response = await fetch(\`\${this.baseUrl}\${endpoint}\`);
+      const data = await response.json();
+      
+      return {
+        success: response.ok,
+        data: response.ok ? data : undefined,
+        error: response.ok ? undefined : data.message,
+        timestamp: Date.now()
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: Date.now()
+      };
+    }
+  }
+}
+
+// 使用示例
+const api = new ApiService('https://api.example.com');
+const userResponse = await api.get<User>('/users/123');
+
+if (userResponse.success) {
+  console.log('用户数据:', userResponse.data);
+} else {
+  console.error('获取用户失败:', userResponse.error);
+}`}
+</EnhancedCodeBlock>
+
+## 表格 Tables
+
+| 功能 Feature | 支持 Support | 说明 Note |
+|--------------|-------------|-----------|
+| 语法高亮     | ✅           | rehype-pretty-code 双主题 |
+| 复制按钮     | ✅           | hover 出现按钮 |
+| 行号         | ✅           | code fence 添加 line-numbers |
+| 行高亮       | ✅           | highlight-* 指令 |
+| 任务列表     | ✅           | GitHub 风格任务渲染 |
+| 脚注 Footnote| ✅           | 使用注释语法定义 |
+
+## 图片 Image
+
+![示例图片 alt](https://placehold.co/600x200/png)
+
+## 脚注 Footnotes
+
+脚注引用示例一个[^1] 还有第二个引用[^long].
+
+[^1]: 这是一个脚注内容。
+[^long]: 多行脚注内容，支持 **markdown** 与 `code`。
+
+## 混合内容 Mixed
+
+内联公式 (不渲染)：`$E=mc^2$` 与 shell 片段 `curl -I https://kunsun.me`。
+
+## 提示块 (模拟)
+
+> [!NOTE] 这是 Note 风格（可后续用 remark-admonitions 改造）
+> 第二行内容。
+
+> [!WARNING] 这是 Warning 风格。
+
+> [!TIP] 这是 Tip 风格。
+
+## Tags (示例)
+
+<Tag>demo</Tag> <Tag>alpha</Tag> <Tag>logseq</Tag>
+
+---
+
+EOF
