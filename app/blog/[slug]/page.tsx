@@ -3,7 +3,11 @@ import "./markdown.css"; // 引入 GitHub 风格 markdown 样式
 import { readdir, readFile } from "fs/promises";
 import matter from "gray-matter";
 
-export default async function Post({ params }: { params: { slug: string } }) {
+export default async function Post({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const filename = `./posts/${slug}/index.mdx`;
   const content = await readFile(filename, "utf-8");

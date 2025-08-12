@@ -13,7 +13,7 @@ export default async function SSRTestPage() {
   });
 
   // 获取请求头信息
-  const headersList = headers();
+  const headersList = await headers();
   const userAgent = headersList.get("user-agent") || "未知";
   const host = headersList.get("host") || "未知";
   const referer = headersList.get("referer") || "无";
