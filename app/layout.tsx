@@ -26,7 +26,7 @@ export default function RootLayout({
         >
           <ReadingProgress />
           <Header />
-          <main className="flex max-w-2xl w-full mx-auto bg-gradient px-4 sm:px-6">
+          <main className="flex max-w-2xl w-full mx-auto px-4 sm:px-6">
             {children}
           </main>
           <CodeEnhancer />
