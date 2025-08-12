@@ -17,7 +17,6 @@
   --md-heading-fg: var(--ls-primary-text-color);
   --md-selection-bg: var(--ls-selection-bg, var(--ls-selection-background-color, #3e8adc33));
   color: var(--md-fg);
-  background-color: var(--md-bg);
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
   font-size: 16px;
   line-height: 1.5;
@@ -26,7 +25,7 @@
 }
 
 /* 深色模式在全局变量中已处理；如需额外定制标题淡化可单独开启 */
-.dark .markdown-body { color: var(--md-fg); background-color: var(--md-bg); }
+.dark .markdown-body { color: var(--md-fg); }
 
 /* 使用变量的通用元素（放在文件前部，后续原始规则若有硬编码可在最末再覆盖） */
 .markdown-body a { color: var(--md-accent); }
