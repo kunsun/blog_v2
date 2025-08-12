@@ -1,4 +1,5 @@
 import path from 'path';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // 移除静态导出配置，以支持Vercel的服务端渲染
@@ -22,6 +23,12 @@ const nextConfig = {
   
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     config.resolve.alias['@posts'] = path.join(process.cwd(), 'posts');
+    
+    // 完全禁用CSS压缩来避免与Tailwind CSS v4的兼容性问题
+    if (!dev) {
+      config.optimization.minimize = false;
+    }
+    
     return config;
   },
 };
