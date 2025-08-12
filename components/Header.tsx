@@ -12,10 +12,10 @@ export default function Header() {
 
   useEffect(() => setMounted(true), []);
   return (
-    <div className="bg-color border-neutral-100 dark:border-neutral-900 h-max  relative flex justify-between items-center mx-2 px-2 md:px-3 h-[60px]">
+    <div className="header-blur relative flex justify-between items-center px-4 sm:px-6 h-[60px] max-w-2xl w-full mx-auto">
       {
         <Link href="/" className="font-sans inline-block text-2xl font-black">
-          <div className="mt-3 flex items-center max-w-2xl">
+          <div className="mt-3 flex items-center">
             <Image src="/logo_2.png" width={28} height={28} alt="" />
             <div className="text-[16px] ml-[4px] font-mono">kunsun</div>
           </div>

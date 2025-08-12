@@ -1,18 +1,55 @@
-/*dark*/
+/* 主题适配：改为引用全局 logseq 风格变量（--ls-*）以避免重复维护 */
 
+/* 基础样式 + 变量映射 (亮/暗通过 :root/.dark 已切换) */
 .markdown-body {
-  color-scheme: dark;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  margin: 0;
-  color: #e6edf3;
-  background-color: #0d1117;
+  /* 映射：GitHub 风格变量 → Bonofix 变量体系 */
+  --md-fg: var(--ls-primary-text-color);
+  --md-bg: var(--ls-primary-background-color);
+  --md-accent: var(--ls-link-text-color);
+  --md-border: var(--ls-border-color);
+  --md-muted: var(--ls-muted-text-color, var(--ls-secondary-text-color));
+  --md-code-bg: var(--ls-codeblock-bg, var(--ls-secondary-background-color));
+  --md-code-fg: var(--ls-primary-text-color);
+  --md-table-row-alt: var(--ls-tertiary-background-color);
+  --md-inline-code-bg: var(--ls-inline-code-bg, rgba(135,131,120,0.15));
+  --md-inline-code-fg: var(--ls-inline-code-fg, #eb5757);
+  --md-blockquote-border: var(--ls-blockquote-border-color, var(--ls-primary-text-color));
+  --md-heading-fg: var(--ls-primary-text-color);
+  --md-selection-bg: var(--ls-selection-bg, var(--ls-selection-background-color, #3e8adc33));
+  color: var(--md-fg);
+  background-color: var(--md-bg);
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
   font-size: 16px;
   line-height: 1.5;
   word-wrap: break-word;
   scroll-behavior: auto;
 }
+
+/* 深色模式在全局变量中已处理；如需额外定制标题淡化可单独开启 */
+.dark .markdown-body { color: var(--md-fg); background-color: var(--md-bg); }
+
+/* 使用变量的通用元素（放在文件前部，后续原始规则若有硬编码可在最末再覆盖） */
+.markdown-body a { color: var(--md-accent); }
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 { color: var(--md-heading-fg); }
+.markdown-body h1,
+.markdown-body h2 { border-color: var(--md-border); }
+.markdown-body blockquote { color: var(--md-muted); border-left-color: var(--md-blockquote-border); }
+.markdown-body hr { background-color: var(--md-border); border: 0; }
+.markdown-body kbd { background-color: var(--md-code-bg); color: var(--md-code-fg); border-color: var(--md-border); box-shadow: inset 0 -1px 0 var(--md-border); }
+.markdown-body code,
+.markdown-body tt { background-color: var(--md-inline-code-bg); color: var(--md-inline-code-fg); }
+.markdown-body pre,
+.markdown-body .highlight pre { background-color: var(--md-code-bg); color: var(--md-code-fg); }
+.markdown-body table th,
+.markdown-body table td { border-color: var(--md-border); }
+.markdown-body table tr { background-color: var(--md-bg); border-top-color: var(--md-border); }
+.markdown-body table tr:nth-child(2n) { background-color: var(--md-table-row-alt); }
+.markdown-body ::selection { background: var(--md-selection-bg); }
 
 .markdown-body .octicon {
   display: inline-block;
@@ -70,18 +107,9 @@
   font-style: italic;
 }
 
-.markdown-body h1 {
-  margin: .67em 0;
-  font-weight: 600;
-  padding-bottom: .3em;
-  font-size: 2em;
-  border-bottom: 1px solid #30363db3;
-}
+.markdown-body h1 { margin: 2.5rem 0 1.25rem; font-weight:700; padding-bottom:.25em; font-size:2.15em; line-height:1.2; border-bottom:1px solid var(--md-border); }
 
-.markdown-body mark {
-  background-color: #bb800926;
-  color: #e6edf3;
-}
+.markdown-body mark { background-color: color-mix(in srgb, var(--md-accent) 25%, transparent); color: var(--md-fg); }
 
 .markdown-body small {
   font-size: 90%;
@@ -118,21 +146,10 @@
   font-size: 1em;
 }
 
-.markdown-body figure {
-  margin: 1em 40px;
-}
+/* 精简：移除 figure 外边距，交由容器统一控制 */
+.markdown-body figure { margin: 1.25rem 0; }
 
-.markdown-body hr {
-  box-sizing: content-box;
-  overflow: hidden;
-  background: transparent;
-  border-bottom: 1px solid #30363db3;
-  height: .25em;
-  padding: 0;
-  margin: 24px 0;
-  background-color: #30363d;
-  border: 0;
-}
+.markdown-body hr { box-sizing:content-box; overflow:hidden; height:.25em; padding:0; margin:24px 0; background:var(--md-border); border:0; }
 
 .markdown-body input {
   font: inherit;
@@ -254,19 +271,7 @@
   outline-offset: 0;
 }
 
-.markdown-body kbd {
-  display: inline-block;
-  padding: 3px 5px;
-  font: 11px ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
-  line-height: 10px;
-  color: #e6edf3;
-  vertical-align: middle;
-  background-color: #161b22;
-  border: solid 1px #6e768166;
-  border-bottom-color: #6e768166;
-  border-radius: 6px;
-  box-shadow: inset 0 -1px 0 #6e768166;
-}
+.markdown-body kbd { display:inline-block; padding:3px 5px; font:11px ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace; line-height:10px; color:var(--md-code-fg); vertical-align:middle; background:var(--md-code-bg); border:1px solid color-mix(in srgb, var(--md-border) 60%, transparent); border-radius:6px; box-shadow:inset 0 -1px 0 color-mix(in srgb, var(--md-border) 60%, transparent); }
 
 .markdown-body h1,
 .markdown-body h2,
@@ -282,60 +287,26 @@
 
 .markdown-body h2 {
   font-weight: 600;
-  padding-bottom: .3em;
-  font-size: 1.5em;
-  border-bottom: 1px solid #30363db3;
+  margin-top: 2.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: .25em;
+  font-size: 1.65em;
+  line-height: 1.3;
+  border-bottom: 1px solid var(--md-border);
 }
 
 .markdown-body h3 {
   font-weight: 600;
-  font-size: 1.25em;
+  margin-top: 2.25rem;
+  margin-bottom: .75rem;
+  font-size: 1.35em;
+  line-height: 1.35;
 }
 
 .markdown-body h4 {
   font-weight: 600;
-  font-size: 1em;
-}
-
-.markdown-body h5 {
-  font-weight: 600;
-  font-size: .875em;
-}
-
-.markdown-body h6 {
-  font-weight: 600;
-  font-size: .85em;
-  color: #8d96a0;
-}
-
-.markdown-body p {
-  margin-top: 0;
-  margin-bottom: 10px;
-}
-
-.markdown-body blockquote {
-  margin: 0;
-  padding: 0 1em;
-  color: #8d96a0;
-  border-left: .25em solid #30363d;
-}
-
-.markdown-body ul,
-.markdown-body ol {
-  margin-top: 0;
-  margin-bottom: 0;
-  padding-left: 2em;
-}
-
-.markdown-body ol ol,
-.markdown-body ul ol {
-  list-style-type: lower-roman;
-}
-
-.markdown-body ul ul ol,
-.markdown-body ul ol ol,
-.markdown-body ol ul ol,
-.markdown-body ol ol ol {
+  margin-top: 1.75rem;
+  /* 移除老旧 span.frame / 对齐辅助类，现代内容中很少使用 */
   list-style-type: lower-alpha;
 }
 
@@ -343,6 +314,7 @@
   margin-left: 0;
 }
 
+/* 行内等宽字体基础 (保持12px作为基准，变量可扩展) */
 .markdown-body tt,
 .markdown-body code,
 .markdown-body samp {
@@ -351,12 +323,22 @@
 }
 
 .markdown-body pre {
-  margin-top: 0;
-  margin-bottom: 0;
+  margin: 1.25rem 0;
   font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
-  font-size: 12px;
+  font-size: 13px;
+  line-height: 1.55;
   word-wrap: normal;
+  position: relative;
+  background: var(--md-code-bg);
+  color: var(--md-code-fg);
+  border: 1px solid var(--md-border);
+  border-radius: 8px;
+  padding: 16px 18px;
+  overflow: auto;
 }
+.markdown-body pre::-webkit-scrollbar { height: 10px; }
+.markdown-body pre::-webkit-scrollbar-track { background: transparent; }
+.markdown-body pre::-webkit-scrollbar-thumb { background: var(--md-border); border-radius: 6px; }
 
 .markdown-body .octicon {
   display: inline-block;
@@ -571,24 +553,14 @@
   font-weight: 600;
 }
 
-.markdown-body table th,
-.markdown-body table td {
-  padding: 6px 13px;
-  border: 1px solid #30363d;
-}
+.markdown-body table th, .markdown-body table td { padding:6px 13px; border:1px solid var(--md-border); }
 
 .markdown-body table td>:last-child {
   margin-bottom: 0;
 }
 
-.markdown-body table tr {
-  background-color: #0d1117;
-  border-top: 1px solid #30363db3;
-}
-
-.markdown-body table tr:nth-child(2n) {
-  background-color: #161b22;
-}
+.markdown-body table tr { background-color: var(--md-bg); border-top:1px solid color-mix(in srgb, var(--md-border) 60%, transparent); }
+.markdown-body table tr:nth-child(2n) { background-color: var(--md-table-row-alt); }
 
 .markdown-body table img {
   background-color: transparent;
@@ -613,27 +585,14 @@
   overflow: hidden;
 }
 
-.markdown-body span.frame>span {
-  display: block;
-  float: left;
-  width: auto;
-  padding: 7px;
-  margin: 13px 0 0;
-  overflow: hidden;
-  border: 1px solid #30363d;
-}
+.markdown-body span.frame>span { display:block; float:left; width:auto; padding:7px; margin:13px 0 0; overflow:hidden; border:1px solid var(--md-border); }
 
 .markdown-body span.frame span img {
   display: block;
   float: left;
 }
 
-.markdown-body span.frame span span {
-  display: block;
-  padding: 5px 0 0;
-  clear: both;
-  color: #e6edf3;
-}
+.markdown-body span.frame span span { display:block; padding:5px 0 0; clear:both; color: var(--md-fg); }
 
 .markdown-body span.align-center {
   display: block;
@@ -641,12 +600,7 @@
   clear: both;
 }
 
-.markdown-body span.align-center>span {
-  display: block;
-  margin: 13px auto 0;
-  overflow: hidden;
-  text-align: center;
-}
+.markdown-body span.align-center>span { display:block; margin:13px auto 0; overflow:hidden; text-align:center; }
 
 .markdown-body span.align-center span img {
   margin: 0 auto;
@@ -659,12 +613,7 @@
   clear: both;
 }
 
-.markdown-body span.align-right>span {
-  display: block;
-  margin: 13px 0 0;
-  overflow: hidden;
-  text-align: right;
-}
+.markdown-body span.align-right>span { display:block; margin:13px 0 0; overflow:hidden; text-align:right; }
 
 .markdown-body span.align-right span img {
   margin: 0;
@@ -696,15 +645,7 @@
   text-align: right;
 }
 
-.markdown-body code,
-.markdown-body tt {
-  padding: .2em .4em;
-  margin: 0;
-  font-size: 85%;
-  white-space: break-spaces;
-  background-color: #6e768166;
-  border-radius: 6px;
-}
+.markdown-body code, .markdown-body tt { padding:.18em .45em; margin:0; font-size:85%; white-space:break-spaces; background:var(--md-inline-code-bg); color:var(--md-inline-code-fg); border-radius:4px; border:1px solid color-mix(in srgb, var(--md-border) 70%, transparent); }
 
 .markdown-body code br,
 .markdown-body tt br {
@@ -741,16 +682,7 @@
   word-break: normal;
 }
 
-.markdown-body .highlight pre,
-.markdown-body pre {
-  padding: 16px;
-  overflow: auto;
-  font-size: 85%;
-  line-height: 1.45;
-  color: #e6edf3;
-  background-color: #161b22;
-  border-radius: 6px;
-}
+/* 旧 pre 覆盖已移除 */
 
 .markdown-body pre code,
 .markdown-body pre tt {
@@ -1101,3 +1033,5 @@
 .markdown-body>*:first-child>.heading-element:first-child {
   margin-top: 0 !important;
 }
+
+/* 底部旧 overrides 已移除，暗色定制通过变量完成 */
