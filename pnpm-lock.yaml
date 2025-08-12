@@ -78,6 +78,9 @@ importers:
       gh-pages:
         specifier: ^6.3.0
         version: 6.3.0
+      overnight:
+        specifier: ^1.8.0
+        version: 1.8.0
       postcss:
         specifier: ^8.5.6
         version: 8.5.6
@@ -2287,6 +2290,10 @@ packages:
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
     engines: {node: '>= 0.8.0'}
+
+  overnight@1.8.0:
+    resolution: {integrity: sha512-8MK831bugEbObv4iVtcP6h3PS0ixi9gZiSRdqKuJKXhpv0URvn+03TZ2tlcXWcqXtCRrxb3InNT7ADFJYXbv9A==}
+    engines: {vscode: ^1.32.0}
 
   own-keys@1.0.1:
     resolution: {integrity: sha512-qFOyK5PjiWZd+QQIh+1jhdb9LpxTF0qs7Pm8o5QHYZ0M3vKqSqzsZaEB6oWlxZ+q2sJBMI/Ktgd2N5ZwQoRHfg==}
@@ -5783,6 +5790,8 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
       word-wrap: 1.2.5
+
+  overnight@1.8.0: {}
 
   own-keys@1.0.1:
     dependencies:

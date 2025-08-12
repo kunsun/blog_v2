@@ -34,6 +34,7 @@
     "eslint": "^9.33.0",
     "eslint-config-next": "15.4.6",
     "gh-pages": "^6.3.0",
+    "overnight": "^1.8.0",
     "postcss": "^8.5.6",
     "postcss-nesting": "^13.0.2",
     "remark-gfm": "^4.0.1",
