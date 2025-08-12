@@ -3,6 +3,7 @@ import Image from "next/image";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkSmartpants from "remark-smartypants";
 import rehypePrettyCode from "rehype-pretty-code";
+import remarkGfm from "remark-gfm";
 import darkPlus from "tm-themes/themes/dark-plus.json";
 import githubLight from "tm-themes/themes/github-light-default.json";
 import { remarkMdxEvalCodeBlock } from "./mdx.js";
@@ -44,7 +45,8 @@ export function CustomMDX({ filename, source, postComponents }: any) {
         mdxOptions: {
           useDynamicImport: true,
           remarkPlugins: [
-            [remarkSmartpants],
+            remarkSmartpants,
+            remarkGfm,
             [remarkMdxEvalCodeBlock, filename] as any,
           ],
           rehypePlugins: [
