@@ -169,53 +169,6 @@ export const Button: React.FC<ButtonProps> = ({
 
 ### 增强代码块组件测试
 
-<EnhancedCodeBlock title="API 服务示例" language="typescript">
-{`interface ApiResponse<T> {
-  success: boolean;
-  data?: T;
-  error?: string;
-  timestamp: number;
-}
-
-class ApiService {
-  private baseUrl: string;
-  
-  constructor(baseUrl: string) {
-    this.baseUrl = baseUrl;
-  }
-  
-  async get<T>(endpoint: string): Promise<ApiResponse<T>> {
-    try {
-      const response = await fetch(\`\${this.baseUrl}\${endpoint}\`);
-      const data = await response.json();
-      
-      return {
-        success: response.ok,
-        data: response.ok ? data : undefined,
-        error: response.ok ? undefined : data.message,
-        timestamp: Date.now()
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: Date.now()
-      };
-    }
-  }
-}
-
-// 使用示例
-const api = new ApiService('https://api.example.com');
-const userResponse = await api.get<User>('/users/123');
-
-if (userResponse.success) {
-  console.log('用户数据:', userResponse.data);
-} else {
-  console.error('获取用户失败:', userResponse.error);
-}`}
-</EnhancedCodeBlock>
-
 ## 表格 Tables
 
 | 功能 Feature | 支持 Support | 说明 Note |
