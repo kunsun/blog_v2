@@ -23,7 +23,8 @@
     "react-dom": "^19.1.1",
     "rehype-pretty-code": "^0.14.1",
     "remark-smartypants": "^3.0.2",
-    "tm-themes": "^1.10.7"
+    "tm-themes": "^1.10.7",
+    "zustand": "^5.0.7"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.11",

@@ -56,3 +56,18 @@ export function remarkMdxEvalCodeBlock() {
     });
   };
 }
+
+// 移除 MDX 内容中的第一个顶级 H1，避免与页面外层标题重复
+export function remarkRemoveFirstH1() {
+  return (tree) => {
+    if (!tree || !Array.isArray(tree.children)) return;
+    let removed = false;
+    tree.children = tree.children.filter((node) => {
+      if (!removed && node?.type === "heading" && node?.depth === 1) {
+        removed = true;
+        return false;
+      }
+      return true;
+    });
+  };
+}
