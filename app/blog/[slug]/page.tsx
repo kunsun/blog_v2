@@ -35,6 +35,7 @@ export default async function Post({
           source={mdxContent}
           filename={filename}
           postComponents={postComponents}
+          removeFirstH1={!data.keepH1}
         />
       </div>
     </article>

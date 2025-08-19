@@ -1,0 +1,89 @@
+---
+title: "Zustand 状态管理在 MDX 中的应用"
+date: "2025-08-19"
+description: "展示如何在 MDX 中使用 Zustand 进行全局状态管理，包括购物车、主题切换、实时聊天等实际应用场景"
+tags: ["Zustand", "State Management", "React", "MDX"]
+---
+
+# Zustand 状态管理在 MDX 中的应用
+
+Zustand 是一个小巧、快速、可扩展的状态管理解决方案。它使用简化的 flux 原理，有着基于 hooks 的舒适的 API。让我们看看如何在 MDX 中使用 Zustand 来管理复杂的应用状态。
+
+## 什么是 Zustand？
+
+Zustand 的优势：
+- **轻量级**：压缩后仅 2.9kB
+- **无样板代码**：不需要 providers、reducers 或 actions
+- **TypeScript 友好**：完整的类型推断
+- **DevTools 支持**：与 Redux DevTools 集成
+
+## 1. 基础计数器示例
+
+首先让我们看一个简单的计数器，展示 Zustand 的基本用法：
+
+<SimpleCounter />
+
+## 2. 购物车应用
+
+这个示例展示了一个完整的购物车功能，包括添加商品、删除商品、计算总价等：
+
+<ShoppingCart />
+
+## 3. 主题管理器
+
+使用 Zustand 管理应用主题和用户偏好：
+
+<ThemeManager />
+
+## 4. 实时聊天室
+
+一个简单的聊天室，展示如何使用 Zustand 管理聊天消息：
+
+<ChatRoom />
+
+## 5. 待办事项管理
+
+完整的 TODO 应用，展示 CRUD 操作：
+
+<TodoManager />
+
+## 6. 用户认证状态
+
+模拟用户登录/登出状态管理：
+
+<AuthManager />
+
+## Zustand 的核心概念
+
+### Store 创建
+```javascript
+const useStore = create((set) => ({
+  count: 0,
+  increment: () => set((state) => ({ count: state.count + 1 })),
+  decrement: () => set((state) => ({ count: state.count - 1 })),
+}))
+```
+
+### 状态订阅
+```javascript
+const count = useStore((state) => state.count)
+const increment = useStore((state) => state.increment)
+```
+
+### 中间件支持
+- **persist**：持久化状态到 localStorage
+- **devtools**：Redux DevTools 集成
+- **subscribeWithSelector**：选择性订阅
+- **immer**：不可变状态更新
+
+## 总结
+
+Zustand 在 MDX 中的使用展示了现代状态管理的简洁性和强大功能：
+
+1. **简单的 API**：无需复杂的设置和样板代码
+2. **灵活的架构**：可以轻松扩展和组合
+3. **优秀的性能**：细粒度的更新和优化
+4. **TypeScript 支持**：完整的类型安全
+5. **中间件生态**：丰富的插件系统
+
+通过这些示例，你可以看到 Zustand 如何简化复杂应用的状态管理，使得在 MDX 中创建交互式组件变得轻松愉快。
