@@ -17,7 +17,7 @@ export default function Header() {
         <Link href="/" className="font-sans inline-block text-2xl font-black">
           <div className="mt-3 flex items-center">
             <Image src="/logo_2.png" width={28} height={28} alt="" />
-            <div className="text-[16px] ml-[4px] font-mono">kunsun</div>
+            {/* <div className="text-[16px] ml-[4px] font-mono">kunsun</div> */}
           </div>
         </Link>
       }

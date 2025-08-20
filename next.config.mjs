@@ -15,7 +15,7 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/resume',
+        source: '/book',
         destination: '/resume/index.html',
       },
     ];
