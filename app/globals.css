@@ -124,12 +124,14 @@
   .text-primary { color: var(--ls-primary-text-color); }
   .text-secondary { color: var(--ls-secondary-text-color); }
   .text-tertiary, .text-subtitle { color: var(--ls-muted-text-color); }
-  .dark .text-primary, .dark .text-secondary, .dark .text-tertiary, .dark .text-subtitle { color: inherit; }
 
   /* 链接 */
   a { color: var(--ls-link-text-color); text-decoration:none; transition:color .2s ease; }
   a:hover { color: var(--ls-link-text-hover-color); }
   a:focus-visible { outline:2px solid var(--ls-link-text-color); outline-offset:2px; border-radius:4px; }
+  /* 不让链接包裹时影响次要文本颜色（如时间与描述） */
+  a .text-tertiary, a .text-subtitle { color: var(--ls-muted-text-color); }
+  a:hover .text-tertiary, a:hover .text-subtitle { color: var(--ls-muted-text-color); }
   ::selection { background: var(--ls-selection-bg); }
 
   /* 行内代码 / 代码块 */
