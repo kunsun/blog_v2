@@ -18,14 +18,14 @@ export default function ReadingProgress() {
   return (
     <div
       aria-hidden
-      className="fixed left-0 top-0 h-[3px] w-full z-[60] bg-transparent"
+      className="fixed left-0 top-0 h-[2px] w-full z-[60] bg-transparent"
     >
       <div
-        className="h-full origin-left transition-[width] duration-150"
+        className="h-full origin-left transition-[width] duration-150 opacity-40"
         style={{
           width: `${progress * 100}%`,
           background:
-            "linear-gradient(90deg,var(--ls-link-text-color),var(--rx-logseq-10))",
+            "linear-gradient(90deg,var(--ls-link-text-color),var(--rx-logseq-06))",
         }}
       />
     </div>
