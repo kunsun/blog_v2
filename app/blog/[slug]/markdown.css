@@ -764,7 +764,8 @@
 }
 
 .markdown-body .footnotes li:target {
-  color: #e6edf3;
+  color: #707981;
+  background-color: #f0f6fc;
 }
 
 .markdown-body .footnotes .data-footnote-backref g-emoji {
