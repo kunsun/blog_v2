@@ -759,13 +759,16 @@
   left: -24px;
   pointer-events: none;
   content: "";
-  border: 2px solid #1f6feb;
+  border: 2px solid var(--ls-link-text-color);
   border-radius: 6px;
 }
 
 .markdown-body .footnotes li:target {
-  color: #707981;
-  background-color: #f0f6fc;
+  color: var(--ls-primary-text-color);
+  background-color: var(--ls-selection-bg, rgba(62, 138, 220, 0.15));
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease-in-out;
 }
 
 .markdown-body .footnotes .data-footnote-backref g-emoji {
