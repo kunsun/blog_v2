@@ -6,12 +6,8 @@ export function TimelineDemo() {
   // 视频驱动：与原文提供的 mp4 同步
   const VIDEO_URL =
     "https://www.joshwcomeau.com/videos/use-deferred-value/deferred-01-single-click.mp4";
-  // 同步音频：与视频同源的 ogg
-  const AUDIO_URL =
-    "https://www.joshwcomeau.com/videos/use-deferred-value/deferred-01-single-click.ogg";
 
   const videoRef = useRef(null);
-  const audioRef = useRef(null);
   const trackRef = useRef(null);
   const draggingRef = useRef(false);
 
@@ -20,68 +16,27 @@ export function TimelineDemo() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [hpMs, setHpMs] = useState(200); // 高优先级估计 200ms（可调）
   const [lpMs, setLpMs] = useState(800); // 低优先级估计 800ms（可调）
-  const [audioEnabled, setAudioEnabled] = useState(true);
-  const [audioReady, setAudioReady] = useState(false);
   const timelineMs = Math.max(1, Math.round(durationSec * 1000));
 
   // 事件绑定
   useEffect(() => {
     const v = videoRef.current;
-    const a = audioRef.current;
     if (!v) return;
     const onLoaded = () => setDurationSec(v.duration || 0);
     const onTime = () => setCurrentSec(v.currentTime || 0);
     const onPlay = () => setIsPlaying(true);
     const onPause = () => setIsPlaying(false);
-    const onEnded = () => setIsPlaying(false);
-
-    // 播放/暂停时同步音频
-    const handlePlay = async () => {
-      onPlay();
-      if (a) {
-        try {
-          // 校正一帧的时间偏移
-          if (Math.abs((a.currentTime || 0) - (v.currentTime || 0)) > 0.06) {
-            a.currentTime = v.currentTime || 0;
-          }
-          if (audioEnabled) await a.play();
-        } catch (err) {
-          // 若被策略拦截则静默失败
-          // console.debug('Audio play blocked', err);
-        }
-      }
-    };
-    const handlePause = () => {
-      onPause();
-      if (a) a.pause();
-    };
 
     v.addEventListener("loadedmetadata", onLoaded);
     v.addEventListener("timeupdate", onTime);
-    v.addEventListener("play", handlePlay);
-    v.addEventListener("pause", handlePause);
-    v.addEventListener("ended", onEnded);
-
-    // 音频元数据
-    if (a) {
-      const onAudioLoaded = () => setAudioReady(true);
-      a.addEventListener("loadedmetadata", onAudioLoaded);
-      return () => {
-        v.removeEventListener("loadedmetadata", onLoaded);
-        v.removeEventListener("timeupdate", onTime);
-        v.removeEventListener("play", handlePlay);
-        v.removeEventListener("pause", handlePause);
-        v.removeEventListener("ended", onEnded);
-        a.removeEventListener("loadedmetadata", onAudioLoaded);
-      };
-    }
+    v.addEventListener("play", onPlay);
+    v.addEventListener("pause", onPause);
 
     return () => {
       v.removeEventListener("loadedmetadata", onLoaded);
       v.removeEventListener("timeupdate", onTime);
-      v.removeEventListener("play", handlePlay);
-      v.removeEventListener("pause", handlePause);
-      v.removeEventListener("ended", onEnded);
+      v.removeEventListener("play", onPlay);
+      v.removeEventListener("pause", onPause);
     };
   }, []);
 
@@ -95,36 +50,10 @@ export function TimelineDemo() {
 
   const replay = () => {
     const v = videoRef.current;
-    const a = audioRef.current;
     if (!v) return;
     v.pause();
     v.currentTime = 0;
-    if (a) {
-      a.pause();
-      a.currentTime = 0;
-    }
     v.play();
-    if (a && audioEnabled) {
-      a.play().catch(() => {});
-    }
-  };
-
-  // 音频开关
-  const toggleAudio = () => {
-    const a = audioRef.current;
-    const v = videoRef.current;
-    if (!a) return setAudioEnabled((s) => !s);
-    setAudioEnabled((enabled) => {
-      const next = !enabled;
-      if (!next) {
-        a.pause();
-      } else {
-        // 开启时对齐时间，并在视频播放时尝试播放音频
-        if (v) a.currentTime = v.currentTime || 0;
-        if (v && !v.paused) a.play().catch(() => {});
-      }
-      return next;
-    });
   };
 
   // 时间轴交互（scrub）
@@ -134,10 +63,8 @@ export function TimelineDemo() {
     const rect = el.getBoundingClientRect();
     const pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
     const v = videoRef.current;
-    const a = audioRef.current;
     if (!v) return;
     v.currentTime = pct * durationSec;
-    if (a) a.currentTime = v.currentTime;
   };
   const onMouseDown = (e) => {
     draggingRef.current = true;
@@ -183,17 +110,6 @@ export function TimelineDemo() {
             {isPlaying ? "暂停" : "播放"}
           </button>
           <button
-            onClick={toggleAudio}
-            className={`px-3 py-2 rounded ${
-              audioEnabled
-                ? "bg-emerald-500 text-white hover:bg-emerald-600"
-                : "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
-            }`}
-            title={audioEnabled ? "关闭音频" : "开启音频"}
-          >
-            {audioEnabled ? "音频开" : "音频关"}
-          </button>
-          <button
             onClick={replay}
             className="px-3 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
           >
@@ -210,13 +126,6 @@ export function TimelineDemo() {
           preload="metadata"
           playsInline
           className="w-full h-auto"
-        />
-        {/* 隐藏 audio：用于同步音频播放 */}
-        <audio
-          ref={audioRef}
-          src={AUDIO_URL}
-          preload="auto"
-          style={{ display: "none" }}
         />
       </div>
 
