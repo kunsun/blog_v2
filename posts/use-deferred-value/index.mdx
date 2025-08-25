@@ -1,0 +1,54 @@
+---
+title: React 19：useDeferredValue 实战与可视化指南
+date: 2025-08-25
+summary: 通过多个动效丰富的交互示例，直观理解 useDeferredValue 如何在 React 19 中提升交互流畅度
+tags: [React, Concurrent, 性能优化, 动画, 教程]
+---
+
+> 这是一篇“看得见”的 useDeferredValue 教程：我们用动画把“高优先级（输入交互）”与“低优先级（昂贵渲染）”分离的过程可视化，帮助你一眼看懂它的价值。
+
+## useDeferredValue 是什么？
+
+当某个状态的变化会触发昂贵渲染（如海量列表过滤）时，我们希望“输入”仍然顺滑、响应即时，而“慢的部分”稍后再更新。`useDeferredValue(value)` 会返回一个“延迟同步”的值：
+
+```jsx
+import { useDeferredValue } from 'react';
+
+const deferredValue = useDeferredValue(value);
+// 当 value 频繁变化时，deferredValue 会在稍后（空闲时）才更新
+// 这样昂贵渲染就不会阻塞输入/点击等高优任务
+```
+
+下面通过两个更贴近真实体验的交互演示，配合动效感知“值滞后（stale）”与“补齐”的瞬间。
+
+## 演示一：输入 vs 延迟值（可视化滞后）
+
+<TypingLagDemo />
+
+### 要点
+- “即时值”永远跟手；
+- “延迟值”在页面忙时明显落后，待空闲后追上；
+- 进度条、颜色与光标动效，帮助你直观看到“追赶”的过程。
+
+## 演示二：大列表检索（昂贵渲染被延后）
+
+当我们在输入框里快速输入时，列表过滤会触发大量计算。使用 `useDeferredValue` 将过滤逻辑绑定到“延迟值”，即可显著减少卡顿。
+
+<DeferredSearch />
+
+### 要点
+- 打字时输入框无卡顿；
+- 列表区域会出现“骨架屏 + 进度光标”动效，表示正处于“滞后”状态；
+- 一旦空闲，结果会批量淡入；
+- 你可以调节“数据量”和“工作负载”来感受差异。
+
+## 设计建议与注意事项
+
+- 用 `useDeferredValue` 包裹“昂贵渲染所依赖的值”，而不是把所有值都延迟；
+- 它不是“防抖/节流”，而是“让低优渲染让路于高优交互”；
+- 与 `startTransition` 的对比：`useDeferredValue` 针对“值”，`startTransition` 针对“更新”；
+- 在 SSR/流式渲染下也可工作，但请避免在服务端执行昂贵的同步阻塞。
+
+---
+
+希望这些可视化演示能帮你在实际项目中正确落地 `useDeferredValue`，既保留流畅的交互，又让昂贵渲染“稍后再说”。
