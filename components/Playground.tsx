@@ -10,9 +10,6 @@ import {
   UnstyledOpenInCodeSandboxButton,
   useActiveCode,
   SandpackConsole,
-  useSandpackNavigation,
-  LoadingOverlay,
-  SandpackStack,
 } from "@codesandbox/sandpack-react";
 
 import { useState, useEffect } from "react";
@@ -75,7 +72,7 @@ function PlaygroundHeader({
   return (
     <div className={containerCls}>
       <div className="flex items-center gap-2">
-        <span className={titleCls}>🎮 Code Playground</span>
+        <span className={titleCls}>Code Playground</span>
       </div>
 
       <div className="flex items-center gap-2">
@@ -105,12 +102,6 @@ function PlaygroundHeader({
           </svg>
         </button>
 
-        <button onClick={handleRunClick} className={btnCls} title="刷新预览">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 6V3l4 4-4 4V8c-2.76 0-5 2.24-5 5 0 1.01.3 1.95.82 2.74l-1.46 1.46A6.96 6.96 0 015 13c0-3.87 3.13-7 7-7zm6.18 2.26l1.46-1.46A6.96 6.96 0 0123 13c0 3.87-3.13 7-7 7v3l-4-4 4-4v3c2.76 0 5-2.24 5-5 0-1.01-.3-1.95-.82-2.74z" />
-          </svg>
-        </button>
-
         <UnstyledOpenInCodeSandboxButton
           className={btnCls}
           title="在 CodeSandbox 中打开"
@@ -121,107 +112,6 @@ function PlaygroundHeader({
         </UnstyledOpenInCodeSandboxButton>
       </div>
     </div>
-  );
-}
-
-// 自定义预览组件，带加载状态
-function CustomPreview({ isDark }: { isDark: boolean }) {
-  const { sandpack } = useSandpack();
-  const { status } = sandpack;
-  const [showLoadingDetails, setShowLoadingDetails] = useState(false);
-
-  useEffect(() => {
-    if (status === "running" && !showLoadingDetails) {
-      setShowLoadingDetails(true);
-      const timer = setTimeout(() => {
-        setShowLoadingDetails(false);
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [status, showLoadingDetails]);
-
-  // 检查是否为加载状态
-  const isLoading = status === "initializing" || status === "idle";
-
-  if (isLoading) {
-    return (
-      <div
-        className={`flex flex-col items-center justify-center h-full ${
-          isDark ? "bg-zinc-900 text-zinc-300" : "bg-zinc-50 text-zinc-600"
-        }`}
-      >
-        <div className="text-center">
-          <div
-            className={`w-12 h-12 border-3 border-t-transparent rounded-full animate-spin mb-4 ${
-              isDark ? "border-blue-400" : "border-blue-500"
-            }`}
-          />
-          <div className="text-lg font-medium mb-2">
-            📦 正在初始化代码环境...
-          </div>
-          {showLoadingDetails && (
-            <div className="text-sm opacity-70 space-y-1">
-              <div>• 加载代码模块</div>
-              <div>• 安装依赖包</div>
-              <div>• 准备预览环境</div>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  if (status === "timeout") {
-    return (
-      <div
-        className={`flex flex-col items-center justify-center h-full ${
-          isDark ? "bg-zinc-900 text-zinc-300" : "bg-zinc-50 text-zinc-600"
-        }`}
-      >
-        <div className="text-center">
-          <div className="text-4xl mb-4">⏰</div>
-          <div className="text-lg font-medium mb-2">加载超时</div>
-          <div className="text-sm opacity-70 mb-4">
-            请检查网络连接或代码是否有错误
-          </div>
-          <button
-            onClick={() => sandpack.runSandpack()}
-            className={`px-4 py-2 rounded-lg transition-colors ${
-              isDark
-                ? "bg-blue-600 hover:bg-blue-700 text-white"
-                : "bg-blue-500 hover:bg-blue-600 text-white"
-            }`}
-          >
-            重新加载
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <SandpackPreview
-      showOpenInCodeSandbox={false}
-      showRefreshButton={false}
-      showRestartButton={false}
-      style={{ height: "100%" }}
-      actionsChildren={
-        <div
-          className={`flex items-center gap-2 text-xs px-2 py-1 ${
-            isDark ? "text-zinc-400" : "text-zinc-600"
-          }`}
-        >
-          <div
-            className={`w-2 h-2 rounded-full ${
-              status === "running"
-                ? "bg-green-500 animate-pulse"
-                : "bg-yellow-500"
-            }`}
-          />
-          <span>{status === "running" ? "🟢 运行中" : `🔄 ${status}`}</span>
-        </div>
-      }
-    />
   );
 }
 
@@ -340,13 +230,13 @@ function PlaygroundContent({
               onClick={() => setActiveTab("preview")}
               className={tabButtonCls(activeTab === "preview")}
             >
-              🖥️ 预览
+              预览
             </button>
             <button
               onClick={() => setActiveTab("console")}
               className={tabButtonCls(activeTab === "console")}
             >
-              📝 控制台
+              控制台
             </button>
           </div>
 
@@ -358,15 +248,6 @@ function PlaygroundContent({
                 showRefreshButton={false}
                 showRestartButton={false}
                 style={{ height: "100%" }}
-                actionsChildren={
-                  <div
-                    className={`text-xs px-2 py-1 ${
-                      isDark ? "text-zinc-400" : "text-zinc-600"
-                    }`}
-                  >
-                    <span>🔄 实时预览</span>
-                  </div>
-                }
               />
             ) : (
               <SandpackConsole
