@@ -9,7 +9,7 @@ import {
   useSandpack,
   UnstyledOpenInCodeSandboxButton,
   useActiveCode,
-  SandpackConsole,
+  useSandpackConsole,
 } from "@codesandbox/sandpack-react";
 
 import { useState, useEffect } from "react";
@@ -17,15 +17,11 @@ import { useTheme } from "next-themes";
 
 // 自定义 Header 控制组件
 function PlaygroundHeader({
-  onReset,
   onToggleLineNumbers,
-  onFormat,
   showLineNumbers,
   isDark,
 }: {
-  onReset: () => void;
   onToggleLineNumbers: () => void;
-  onFormat: () => void;
   showLineNumbers: boolean;
   isDark: boolean;
 }) {
@@ -43,20 +39,12 @@ function PlaygroundHeader({
     : "p-1.5 rounded-md text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/70 transition-colors";
 
   const handleResetClick = () => {
-    if (onReset) onReset();
     try {
       sandpack.resetAllFiles();
     } catch {}
   };
 
-  const handleRunClick = () => {
-    try {
-      sandpack.runSandpack();
-    } catch {}
-  };
-
   const handleFormatClick = () => {
-    if (onFormat) onFormat();
     try {
       // 简易格式化：去除行尾空白、统一换行、将 Tab 替换为两个空格
       const formatted = code
@@ -77,8 +65,20 @@ function PlaygroundHeader({
 
       <div className="flex items-center gap-2">
         <button onClick={handleResetClick} className={btnCls} title="重置代码">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M4.755 10.059a7.5 7.5 0 0112.548-3.364l1.903 1.903h-3.183a.75.75 0 000 1.5h4.992a.75.75 0 00.75-.75V4.356a.75.75 0 00-1.5 0v3.18l-1.9-1.9A9 9 0 003.306 9.67a.75.75 0 101.45.388z" />
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+            <path d="M21 3v5h-5" />
+            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+            <path d="M3 21v-5h5" />
           </svg>
         </button>
 
@@ -102,47 +102,106 @@ function PlaygroundHeader({
           </svg>
         </button>
 
-        <UnstyledOpenInCodeSandboxButton
-          className={btnCls}
-          title="在 CodeSandbox 中打开"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M2 12C2 6.48 6.48 2 12 2C17.52 2 22 6.48 22 12C22 17.52 17.52 22 12 22C6.48 22 2 17.52 2 12ZM12 11L8 9V7L12 9L16 7V9L12 11ZM16 10V12L12 14L8 12V10L12 12L16 10Z" />
-          </svg>
-        </UnstyledOpenInCodeSandboxButton>
+        <button className={btnCls}>
+          <UnstyledOpenInCodeSandboxButton
+            title="在 CodeSandbox 中打开"
+            style={{
+              color: "inherit",
+            }}
+          >
+            <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+              <mask id="external-icon-mask">
+                <rect x="0" y="0" width="24" height="24" fill="white"></rect>
+                <rect x="10" y="0" width="16" height="14" fill="black"></rect>
+              </mask>
+              <rect
+                x="3"
+                y="6"
+                width="15"
+                height="15"
+                rx="2"
+                mask="url(#external-icon-mask)"
+                fill="currentColor"
+              ></rect>
+              <path
+                d="M 10 14 L 20 4 h -6 h 6 v 6"
+                stroke="currentColor"
+                fill="none"
+              ></path>
+            </svg>
+          </UnstyledOpenInCodeSandboxButton>
+        </button>
       </div>
     </div>
   );
 }
 
-// 自定义加载组件
-function LoadingScreen({ isDark }: { isDark: boolean }) {
-  const [dots, setDots] = useState(".");
+// 自定义控制台组件
+function CustomConsole({ isDark, logs }: { isDark: boolean; logs: any[] }) {
+  // 只处理 console.log，过滤其他类型
+  const logMessages = logs.filter((log) => log.method === "log");
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setDots((prev) => (prev.length >= 3 ? "." : prev + "."));
-    }, 500);
+  // 格式化消息内容
+  const formatMessage = (data: any[]): string => {
+    if (!data) return "";
 
-    return () => clearInterval(interval);
-  }, []);
+    return data
+      .map((item) => {
+        if (typeof item === "object") {
+          try {
+            return JSON.stringify(item, null, 2);
+          } catch {
+            return String(item);
+          }
+        }
+        return String(item);
+      })
+      .join(" ");
+  };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="h-full flex flex-col">
+      {/* 控制台内容 */}
       <div
-        className={`flex flex-col items-center justify-center h-64 ${
-          isDark ? "bg-zinc-900 text-zinc-300" : "bg-zinc-50 text-zinc-600"
+        className={`flex-1 overflow-auto p-4 space-y-2 ${
+          isDark ? "bg-zinc-900/30" : "bg-white"
         }`}
       >
-        <div className="mb-4">
+        {logMessages.length === 0 ? (
           <div
-            className={`w-8 h-8 border-2 border-t-transparent rounded-full animate-spin ${
-              isDark ? "border-zinc-600" : "border-zinc-400"
+            className={`text-center py-8 ${
+              isDark ? "text-zinc-500" : "text-zinc-400"
             }`}
-          />
-        </div>
-        <div className="text-sm">正在加载代码编辑器{dots}</div>
-        <div className="text-xs mt-2 opacity-70">初始化 Sandpack bundle...</div>
+          >
+            <div className="text-sm">暂无控制台输出</div>
+            <div className="text-xs mt-1">使用 console.log() 输出内容</div>
+          </div>
+        ) : (
+          logMessages.map((log, index) => (
+            <div
+              key={index}
+              className={`flex gap-2 items-start font-mono whitespace-pre-wrap ${
+                isDark ? "text-zinc-200" : "text-zinc-700"
+              } ${
+                index !== logMessages.length - 1
+                  ? `pb-4 mb-4 border-b border-dashed ${
+                      isDark ? "border-zinc-700" : "border-zinc-200"
+                    }`
+                  : ""
+              }`}
+              style={{
+                animation: "fadeFromTransparent 300ms",
+              }}
+            >
+              {/* 消息内容 */}
+              <div className="flex-1 min-w-0">
+                <div className="block animate-fade-in">
+                  {formatMessage(log.data || [])}
+                </div>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
@@ -159,29 +218,11 @@ function PlaygroundContent({
   isDark: boolean;
 }) {
   const [activeTab, setActiveTab] = useState<"preview" | "console">("preview");
-  const [isMounted, setIsMounted] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const { sandpack } = useSandpack();
-
-  // 确保组件在客户端完全挂载后再渲染，避免 SSR 不匹配
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsMounted(true);
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  // 监听 Sandpack 的加载状态
-  useEffect(() => {
-    if (isMounted && sandpack) {
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-      }, 1000); // 给一些时间让 Sandpack 完全初始化
-
-      return () => clearTimeout(timer);
-    }
-  }, [isMounted, sandpack]);
+  const { logs, reset } = useSandpackConsole({
+    maxMessageCount: 150,
+    resetOnPreviewRestart: true,
+  });
 
   const tabButtonCls = (isActive: boolean) => {
     const baseClasses =
@@ -201,10 +242,28 @@ function PlaygroundContent({
     }
   };
 
-  // 在客户端挂载完成前或正在加载时显示加载状态
-  if (!isMounted || isLoading) {
-    return <LoadingScreen isDark={isDark} />;
-  }
+  // 处理刷新预览
+  const handleRefreshPreview = () => {
+    try {
+      sandpack.runSandpack();
+    } catch (error) {
+      console.error("刷新预览失败:", error);
+    }
+  };
+
+  // 处理清空控制台
+  const handleClearConsole = () => {
+    try {
+      reset();
+    } catch (error) {
+      console.error("清空控制台失败:", error);
+    }
+  };
+
+  // 动态按钮样式
+  const actionButtonCls = isDark
+    ? "p-1.5 rounded-md text-zinc-400 hover:text-zinc-200 hover:bg-zinc-700/60 transition-colors"
+    : "p-1.5 rounded-md text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/70 transition-colors";
 
   return (
     <div className="flex flex-col h-full">
@@ -213,51 +272,101 @@ function PlaygroundContent({
         <SandpackCodeEditor
           showTabs
           showLineNumbers={showLineNumbers}
-          showInlineErrors
           wrapContent
           closableTabs
         />
         <div className="flex flex-col flex-1">
           {/* Tab 头部 */}
           <div
-            className={`flex border-b ${
+            className={`flex items-center justify-between border-b ${
               isDark
                 ? "border-zinc-700 bg-zinc-900/20"
                 : "border-zinc-200 bg-zinc-50/40"
             }`}
           >
-            <button
-              onClick={() => setActiveTab("preview")}
-              className={tabButtonCls(activeTab === "preview")}
-            >
-              预览
-            </button>
-            <button
-              onClick={() => setActiveTab("console")}
-              className={tabButtonCls(activeTab === "console")}
-            >
-              控制台
-            </button>
+            {/* 左侧 Tab 按钮 */}
+            <div className="flex">
+              <button
+                onClick={() => setActiveTab("preview")}
+                className={tabButtonCls(activeTab === "preview")}
+              >
+                预览
+              </button>
+              <button
+                onClick={() => setActiveTab("console")}
+                className={tabButtonCls(activeTab === "console")}
+              >
+                控制台
+              </button>
+            </div>
+
+            {/* 右侧动态按钮 */}
+            <div className="flex items-center px-2">
+              {activeTab === "preview" ? (
+                <button
+                  onClick={handleRefreshPreview}
+                  className={actionButtonCls}
+                  title="刷新预览"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+                    <path d="M21 3v5h-5" />
+                    <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+                    <path d="M3 21v-5h5" />
+                  </svg>
+                </button>
+              ) : (
+                <button
+                  onClick={handleClearConsole}
+                  className={actionButtonCls}
+                  title="清空控制台"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="m15 9-6 6" />
+                    <path d="m9 9 6 6" />
+                  </svg>
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Tab 内容区域 */}
-          <div className="flex-1 overflow-hidden">
-            {activeTab === "preview" ? (
+          <div className="flex-1 overflow-hidden relative">
+            <div
+              className={`absolute inset-0 ${
+                activeTab === "preview" ? "block" : "hidden"
+              }`}
+            >
               <SandpackPreview
                 showOpenInCodeSandbox={false}
                 showRefreshButton={false}
-                showRestartButton={false}
                 style={{ height: "100%" }}
               />
-            ) : (
-              <SandpackConsole
-                standalone
-                style={{ height: "100%" }}
-                className="text-xs"
-                maxMessageCount={100}
-                showHeader={false}
-              />
-            )}
+            </div>
+            <div
+              className={`absolute inset-0 ${
+                activeTab === "console" ? "block" : "hidden"
+              }`}
+            >
+              <CustomConsole isDark={isDark} logs={logs} />
+            </div>
           </div>
         </div>
       </SandpackLayout>
@@ -284,44 +393,13 @@ export function Playground({
 }: PlaygroundProps) {
   const { resolvedTheme = "dark" } = useTheme();
   const [showLineNumbers, setShowLineNumbers] = useState(true);
-  const [isClient, setIsClient] = useState(false);
-
-  // 确保只在客户端渲染
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   // 将站点主题映射到 Sandpack 主题
   const sandpackTheme = resolvedTheme === "dark" ? "dark" : "light";
 
-  const handleReset = () => {
-    // 重置功能会通过 useSandpack hook 在子组件中处理
-  };
-
   const handleToggleLineNumbers = () => {
     setShowLineNumbers((prev) => !prev);
   };
-
-  const handleFormat = () => {
-    // 格式化功能
-    console.log("格式化代码");
-  };
-
-  // 如果还没有客户端渲染，显示服务端兼容的加载状态
-  if (!isClient) {
-    return (
-      <div className="my-6 sandpack-playground-wider">
-        <div className="border border-gray-600 rounded-lg overflow-hidden">
-          <div className="flex items-center justify-center h-96 bg-zinc-900 text-zinc-300">
-            <div className="text-center">
-              <div className="w-8 h-8 border-2 border-zinc-600 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-              <div className="text-sm">正在初始化代码环境...</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="my-6 sandpack-playground-wider">
@@ -336,17 +414,11 @@ export function Playground({
           options={
             {
               editorHeight: editorHeight,
-              autorun: true, // 自动运行代码
-              autoReload: true, // 代码变化时自动重新加载
-              bundlerURL: undefined, // 使用默认的 bundler URL
-              logLevel: "info", // 增加日志级别以便调试
             } as any
           }
         >
           <PlaygroundHeader
-            onReset={handleReset}
             onToggleLineNumbers={handleToggleLineNumbers}
-            onFormat={handleFormat}
             showLineNumbers={showLineNumbers}
             isDark={resolvedTheme === "dark"}
           />

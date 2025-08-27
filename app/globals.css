@@ -298,4 +298,106 @@
     to { opacity: 1; transform: translateY(0); }
   }
   .animate-in.fade-in { animation: rx-fade-in 200ms ease-out both; }
+
+  /* 自定义 Sandpack 控制台样式 */
+  .custom-console {
+    /* 控制台容器样式 */
+    border-radius: 0 0 8px 8px;
+    border: 1px solid var(--ls-border-color);
+    border-top: none;
+  }
+
+  .custom-console .sp-console-wrapper {
+    /* 控制台内容区域 */
+    padding: 8px;
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Cascadia Code', monospace !important;
+  }
+
+  .custom-console .sp-console-list {
+    /* 消息列表样式 */
+    gap: 2px;
+  }
+
+  .custom-console .sp-console-item {
+    /* 单条消息样式 */
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 1.4;
+    border-left: 3px solid transparent;
+  }
+
+  /* 不同类型消息的样式 */
+  .custom-console .sp-console-item[data-type="log"] {
+    background-color: var(--ls-secondary-background-color);
+    border-left-color: #6b7280;
+  }
+
+  .custom-console .sp-console-item[data-type="info"] {
+    background-color: rgba(59, 130, 246, 0.1);
+    border-left-color: #3b82f6;
+    color: #3b82f6;
+  }
+
+  .custom-console .sp-console-item[data-type="warn"] {
+    background-color: rgba(245, 158, 11, 0.1);
+    border-left-color: #f59e0b;
+    color: #f59e0b;
+  }
+
+  .custom-console .sp-console-item[data-type="error"] {
+    background-color: rgba(239, 68, 68, 0.1);
+    border-left-color: #ef4444;
+    color: #ef4444;
+  }
+
+  /* 暗色主题下的控制台样式 */
+  .dark .custom-console .sp-console-item[data-type="info"] {
+    background-color: rgba(96, 165, 250, 0.15);
+    color: #93c5fd;
+  }
+
+  .dark .custom-console .sp-console-item[data-type="warn"] {
+    background-color: rgba(251, 191, 36, 0.15);
+    color: #fbbf24;
+  }
+
+  .dark .custom-console .sp-console-item[data-type="error"] {
+    background-color: rgba(248, 113, 113, 0.15);
+    color: #f87171;
+  }
+
+  /* 控制台滚动条样式 */
+  .custom-console .sp-console-list::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-console .sp-console-list::-webkit-scrollbar-track {
+    background: var(--ls-scrollbar-background-color);
+  }
+
+  .custom-console .sp-console-list::-webkit-scrollbar-thumb {
+    background: var(--ls-scrollbar-foreground-color);
+    border-radius: 3px;
+  }
+
+  .custom-console .sp-console-list::-webkit-scrollbar-thumb:hover {
+    background: var(--ls-scrollbar-thumb-hover-color);
+  }
+
+  /* Sandpack 控制台动画效果 */
+  @keyframes fadeFromTransparent {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeFromTransparent 300ms ease-out;
+  }
 }
