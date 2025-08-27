@@ -30,7 +30,7 @@ export default async function Post({
           : new Date(data.date).toLocaleDateString()}
       </div>
       {/* 同时保留原有 markdown 类，增加 markdown-body 以激活 markdown.css */}
-      <div className="markdown markdown-body mt-10 w-full overflow-hidden">
+      <div className="markdown markdown-body mt-10 w-full">
         <CustomMDX
           source={mdxContent}
           filename={filename}

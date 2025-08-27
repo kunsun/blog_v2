@@ -1,11 +1,11 @@
 "use client";
 import { useState } from "react";
-import { CustomSandpackPlayground } from "../../components/SandpackComponents";
+import { Playground } from "@/components/Playground";
 
 // 基础 Sandpack 演示
 export function SandpackDemo() {
   return (
-    <CustomSandpackPlayground
+    <Playground
       template="react"
       theme="dark"
       files={{
@@ -53,7 +53,7 @@ export function SandpackDemo() {
 // 带依赖的组件示例
 export function SandpackWithDependencies() {
   return (
-    <CustomSandpackPlayground
+    <Playground
       template="react"
       theme="dark"
       files={{
@@ -127,7 +127,7 @@ export default function App() {
 // 多文件项目示例
 export function SandpackMultiFile() {
   return (
-    <CustomSandpackPlayground
+    <Playground
       template="react"
       theme="dark"
       files={{
@@ -255,7 +255,7 @@ export default function App() {
 // 完整的自定义演示（带控制面板）
 export function CustomSandpackPlaygroundDemo() {
   return (
-    <CustomSandpackPlayground
+    <Playground
       template="react"
       theme="dark"
       files={{

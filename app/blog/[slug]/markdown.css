@@ -1037,4 +1037,25 @@
   margin-top: 0 !important;
 }
 
+/* 让 CustomSandpackPlayground 比其他内容更宽 */
+.markdown-body .sandpack-playground-wider {
+  margin-left: 0rem;
+  margin-right: 0rem;
+  max-width: none;
+}
+
+@media (min-width: 640px) {
+  .markdown-body .sandpack-playground-wider {
+    margin-left: -1rem;
+    margin-right: -1rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .markdown-body .sandpack-playground-wider {
+    margin-left: -2rem;
+    margin-right: -2rem;
+  }
+}
+
 /* 底部旧 overrides 已移除，暗色定制通过变量完成 */

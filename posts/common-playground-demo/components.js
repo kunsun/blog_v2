@@ -1,80 +1,30 @@
 "use client";
 
-import { CustomSandpackPlayground } from "../../components/SandpackComponents";
+import { Playground } from "@/components/Playground";
+import { Sandpack } from "@codesandbox/sandpack-react";
+
+export function ReactDemo() {
+  return <Sandpack template="react" />;
+}
 
 // React Hook 示例
 export function ReactHookDemo() {
   return (
-    <CustomSandpackPlayground
+    <Playground
       template="react"
       theme="dark"
       files={{
-        "/App.js": `import { useState, useEffect } from 'react';
-
+        "/App.js": `
+import './index.css';
 export default function App() {
-  const [count, setCount] = useState(0);
-  const [message, setMessage] = useState('');
-
-  useEffect(() => {
-    if (count > 0) {
-      setMessage(\`你已经点击了 \${count} 次！\`);
-    } else {
-      setMessage('开始点击按钮吧！');
-    }
-  }, [count]);
-
-  return (
-    <div style={{
-      padding: '20px',
-      textAlign: 'center',
-      fontFamily: 'Arial, sans-serif',
-      background: 'linear-gradient(45deg, #667eea, #764ba2)',
-      color: 'white',
-      borderRadius: '8px',
-      minHeight: '300px',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center'
-    }}>
-      <h2>React Hook 演示</h2>
-      <p style={{ fontSize: '18px', margin: '20px 0' }}>{message}</p>
-      <div>
-        <button 
-          onClick={() => setCount(count + 1)}
-          style={{
-            padding: '10px 20px',
-            fontSize: '16px',
-            background: '#ff6b6b',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-            marginRight: '10px'
-          }}
-        >
-          点击 (+1)
-        </button>
-        <button 
-          onClick={() => setCount(0)}
-          style={{
-            padding: '10px 20px',
-            fontSize: '16px',
-            background: '#74b9ff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer'
-          }}
-        >
-          重置
-        </button>
-      </div>
-      <p style={{ marginTop: '20px', fontSize: '24px', fontWeight: 'bold' }}>
-        计数: {count}
-      </p>
-    </div>
-  );
-}`,
+  return <h1>Good day!</h1>;
+}
+`,
+        "/index.css": `
+h1 {
+  color: tomato;
+}
+`,
       }}
       editorHeight={350}
     />
@@ -84,7 +34,7 @@ export default function App() {
 // Vue 3 组件示例
 export function VueDemo() {
   return (
-    <CustomSandpackPlayground
+    <Playground
       template="vue"
       theme="dark"
       files={{
@@ -256,7 +206,7 @@ export default {
 // 带外部依赖的示例
 export function WithDependenciesDemo() {
   return (
-    <CustomSandpackPlayground
+    <Playground
       template="react"
       theme="dark"
       dependencies={{

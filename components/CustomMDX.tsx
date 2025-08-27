@@ -7,9 +7,11 @@ import { remarkMdxEvalCodeBlock, remarkRemoveFirstH1 } from "./mdx.js";
 import React from "react";
 import overnight from "overnight/themes/Overnight-Slumber.json";
 import { Tag } from "./Tag";
+import { Playground } from "./Playground";
 
 const components = {
   Tag,
+  Playground,
 };
 
 export function CustomMDX({
