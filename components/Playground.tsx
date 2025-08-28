@@ -125,7 +125,7 @@ function PlaygroundHeader({
   isDark: boolean;
 }) {
   const { prettier } = useIsPrettier();
-  const { error, success, prettifyCode } = usePrettier();
+  const { success, prettifyCode } = usePrettier();
 
   const containerCls = isDark
     ? "flex h-11 items-center justify-between px-3 sm:px-4 border-b border-zinc-800 bg-zinc-900/30 backdrop-blur"
@@ -137,9 +137,14 @@ function PlaygroundHeader({
     ? "p-1.5 rounded-md text-zinc-300 hover:text-white hover:bg-zinc-700/60 transition-colors"
     : "p-1.5 rounded-md text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/70 transition-colors";
 
-  // sandpack 相关操作已在外部处理，这里不再需要 sandpack props
+  const { sandpack } = useSandpack();
   const handleResetClick = () => {
-    window.location.reload(); // 简单重载页面实现重置
+    try {
+      sandpack.resetAllFiles();
+    } catch (e) {
+      // 可选：错误处理
+      console.error("重置 Sandpack 文件失败", e);
+    }
   };
 
   const handleFormatClick = () => {
@@ -212,7 +217,7 @@ function PlaygroundHeader({
                 strokeLinejoin="round"
               />
             </svg>
-            <span style={{ fontWeight: 500, fontSize: 13, letterSpacing: 0.5 }}>
+            <span style={{ fontWeight: 500, fontSize: 11, letterSpacing: 0.5 }}>
               Prettier
             </span>
           </button>
@@ -318,36 +323,6 @@ function CustomConsole({ isDark, logs }: { isDark: boolean; logs: any[] }) {
         )}
       </div>
     </div>
-  );
-}
-
-// 包装组件，管理 sandpack 实例
-function PlaygroundWrapper({
-  showLineNumbers,
-  showFileExplorer = false,
-  isDark,
-  onToggleLineNumbers,
-}: {
-  showLineNumbers: boolean;
-  showFileExplorer?: boolean;
-  isDark: boolean;
-  onToggleLineNumbers: () => void;
-}) {
-  const { sandpack } = useSandpack();
-
-  return (
-    <>
-      <PlaygroundHeader
-        onToggleLineNumbers={onToggleLineNumbers}
-        showLineNumbers={showLineNumbers}
-        isDark={isDark}
-      />
-      <PlaygroundContent
-        showLineNumbers={showLineNumbers}
-        showFileExplorer={showFileExplorer}
-        isDark={isDark}
-      />
-    </>
   );
 }
 
