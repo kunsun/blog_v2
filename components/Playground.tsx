@@ -191,10 +191,30 @@ function PlaygroundHeader({
             onClick={handleFormatClick}
             className={btnCls}
             title="格式化代码"
+            style={{ display: "flex", alignItems: "center" }}
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M9.5 4.5L11 6L9.5 7.5L8 6L9.5 4.5ZM7.5 9.5L6 8L4.5 9.5L6 11L7.5 9.5ZM12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7H13V9H21ZM21 13V11H13V13H21ZM21 17V15H13V17H21Z" />
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 18 18"
+              fill="none"
+              style={{
+                marginRight: 4,
+                transition: "stroke 0.2s",
+                stroke: success ? "#22c55e" : "currentColor",
+              }}
+            >
+              <path
+                d="M4 9.5L8 13.5L14 6.5"
+                stroke={success ? "#22c55e" : "currentColor"}
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
+            <span style={{ fontWeight: 500, fontSize: 13, letterSpacing: 0.5 }}>
+              Prettier
+            </span>
           </button>
         )}
 
