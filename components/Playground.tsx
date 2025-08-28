@@ -12,8 +12,107 @@ import {
   useSandpackConsole,
 } from "@codesandbox/sandpack-react";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import * as prettier from "prettier/standalone";
+import prettierPluginBabel from "prettier/plugins/babel";
+import prettierPluginEstree from "prettier/plugins/estree";
 import { useTheme } from "next-themes";
+
+const useIsPrettier = () => {
+  const [prettier, setPrettier] = useState(false);
+  const { sandpack } = useSandpack();
+
+  useEffect(() => {
+    const activeFile = sandpack.files[sandpack.activeFile];
+    if (!activeFile) return;
+
+    const fileExtension = sandpack.activeFile.split(".").pop()?.toLowerCase();
+    if (!fileExtension) return;
+
+    const prettierExtensions = [
+      "js",
+      "ts",
+      "jsx",
+      "tsx",
+      "scss",
+      "css",
+      "html",
+    ];
+    const isPrettierSupported = !(
+      activeFile.readOnly || !prettierExtensions.includes(fileExtension)
+    );
+
+    setPrettier(isPrettierSupported);
+  }, [sandpack.files, sandpack.activeFile]);
+
+  return { prettier };
+};
+
+// Hook to handle Prettier formatting
+const usePrettier = () => {
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const { sandpack } = useSandpack();
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "s") {
+        event.preventDefault();
+        prettifyCode();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [sandpack.files, sandpack.activeFile]);
+
+  const debouncedUpdate = useCallback(
+    (code: string) => {
+      sandpack.updateCurrentFile(code, false);
+    },
+    [sandpack.activeFile, sandpack.files]
+  );
+
+  const prettifyCode = async () => {
+    const activeFile = sandpack.files[sandpack.activeFile];
+    const currentCode = activeFile.code;
+
+    try {
+      const fileExtension =
+        sandpack.activeFile.split(".").pop()?.toLowerCase() ?? "";
+      let formattedCode = currentCode;
+      // 只处理js/jsx/ts/tsx
+      if (["js", "jsx", "ts", "tsx"].includes(fileExtension)) {
+        console.log({ prettier });
+        formattedCode = await prettier.format(currentCode, {
+          parser:
+            fileExtension === "ts" || fileExtension === "tsx"
+              ? "babel-ts"
+              : "babel",
+          plugins: [prettierPluginBabel, prettierPluginEstree],
+          semi: true,
+          singleQuote: true,
+          tabWidth: 2,
+          trailingComma: "es5",
+          printWidth: 80,
+        });
+      }
+      setError(false);
+      setSuccess(true);
+      debouncedUpdate(formattedCode);
+    } catch (error) {
+      setError(true);
+      console.error("Prettier formatting error:", error);
+    } finally {
+      setTimeout(() => {
+        setSuccess(false);
+      }, 500);
+    }
+  };
+
+  return { error, success, prettifyCode };
+};
 
 // 自定义 Header 控制组件
 function PlaygroundHeader({
@@ -25,8 +124,8 @@ function PlaygroundHeader({
   showLineNumbers: boolean;
   isDark: boolean;
 }) {
-  const { sandpack } = useSandpack();
-  const { code, updateCode } = useActiveCode();
+  const { prettier } = useIsPrettier();
+  const { error, success, prettifyCode } = usePrettier();
 
   const containerCls = isDark
     ? "flex h-11 items-center justify-between px-3 sm:px-4 border-b border-zinc-800 bg-zinc-900/30 backdrop-blur"
@@ -38,23 +137,13 @@ function PlaygroundHeader({
     ? "p-1.5 rounded-md text-zinc-300 hover:text-white hover:bg-zinc-700/60 transition-colors"
     : "p-1.5 rounded-md text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/70 transition-colors";
 
+  // sandpack 相关操作已在外部处理，这里不再需要 sandpack props
   const handleResetClick = () => {
-    try {
-      sandpack.resetAllFiles();
-    } catch {}
+    window.location.reload(); // 简单重载页面实现重置
   };
 
   const handleFormatClick = () => {
-    try {
-      // 简易格式化：去除行尾空白、统一换行、将 Tab 替换为两个空格
-      const formatted = code
-        .replace(/\r\n?/g, "\n")
-        .replace(/\t/g, "  ")
-        .replace(/[ \t]+$/gm, "");
-      if (formatted !== code) {
-        updateCode(formatted);
-      }
-    } catch {}
+    prettifyCode();
   };
 
   return (
@@ -65,20 +154,25 @@ function PlaygroundHeader({
 
       <div className="flex items-center gap-2">
         <button onClick={handleResetClick} className={btnCls} title="重置代码">
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
-            <path d="M21 3v5h-5" />
-            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
-            <path d="M3 21v-5h5" />
+          <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+            <mask id="reset-icon-mask">
+              <rect x="0" y="0" width="24" height="24" fill="black"></rect>
+              <rect x="9" y="0" width="16" height="24" fill="white"></rect>
+            </mask>
+            <line
+              x1="5"
+              y1="19"
+              x2="5"
+              y2="5"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            ></line>
+            <polygon
+              points="19 20 9 12 19 4 19 20"
+              mask="url(#reset-icon-mask)"
+              fill="currentColor"
+            ></polygon>
           </svg>
         </button>
 
@@ -92,45 +186,45 @@ function PlaygroundHeader({
           </svg>
         </button>
 
-        <button
-          onClick={handleFormatClick}
-          className={btnCls}
-          title="格式化代码"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M9.5 4.5L11 6L9.5 7.5L8 6L9.5 4.5ZM7.5 9.5L6 8L4.5 9.5L6 11L7.5 9.5ZM12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7H13V9H21ZM21 13V11H13V13H21ZM21 17V15H13V17H21Z" />
-          </svg>
-        </button>
-
-        <button className={btnCls}>
-          <UnstyledOpenInCodeSandboxButton
-            title="在 CodeSandbox 中打开"
-            style={{
-              color: "inherit",
-            }}
+        {prettier && (
+          <button
+            onClick={handleFormatClick}
+            className={btnCls}
+            title="格式化代码"
           >
-            <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
-              <mask id="external-icon-mask">
-                <rect x="0" y="0" width="24" height="24" fill="white"></rect>
-                <rect x="10" y="0" width="16" height="14" fill="black"></rect>
-              </mask>
-              <rect
-                x="3"
-                y="6"
-                width="15"
-                height="15"
-                rx="2"
-                mask="url(#external-icon-mask)"
-                fill="currentColor"
-              ></rect>
-              <path
-                d="M 10 14 L 20 4 h -6 h 6 v 6"
-                stroke="currentColor"
-                fill="none"
-              ></path>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M9.5 4.5L11 6L9.5 7.5L8 6L9.5 4.5ZM7.5 9.5L6 8L4.5 9.5L6 11L7.5 9.5ZM12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7H13V9H21ZM21 13V11H13V13H21ZM21 17V15H13V17H21Z" />
             </svg>
-          </UnstyledOpenInCodeSandboxButton>
-        </button>
+          </button>
+        )}
+
+        <UnstyledOpenInCodeSandboxButton
+          title="在 CodeSandbox 中打开"
+          style={{
+            color: "inherit",
+          }}
+        >
+          <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+            <mask id="external-icon-mask">
+              <rect x="0" y="0" width="24" height="24" fill="white"></rect>
+              <rect x="10" y="0" width="16" height="14" fill="black"></rect>
+            </mask>
+            <rect
+              x="3"
+              y="6"
+              width="15"
+              height="15"
+              rx="2"
+              mask="url(#external-icon-mask)"
+              fill="currentColor"
+            ></rect>
+            <path
+              d="M 10 14 L 20 4 h -6 h 6 v 6"
+              stroke="currentColor"
+              fill="none"
+            ></path>
+          </svg>
+        </UnstyledOpenInCodeSandboxButton>
       </div>
     </div>
   );
@@ -204,6 +298,36 @@ function CustomConsole({ isDark, logs }: { isDark: boolean; logs: any[] }) {
         )}
       </div>
     </div>
+  );
+}
+
+// 包装组件，管理 sandpack 实例
+function PlaygroundWrapper({
+  showLineNumbers,
+  showFileExplorer = false,
+  isDark,
+  onToggleLineNumbers,
+}: {
+  showLineNumbers: boolean;
+  showFileExplorer?: boolean;
+  isDark: boolean;
+  onToggleLineNumbers: () => void;
+}) {
+  const { sandpack } = useSandpack();
+
+  return (
+    <>
+      <PlaygroundHeader
+        onToggleLineNumbers={onToggleLineNumbers}
+        showLineNumbers={showLineNumbers}
+        isDark={isDark}
+      />
+      <PlaygroundContent
+        showLineNumbers={showLineNumbers}
+        showFileExplorer={showFileExplorer}
+        isDark={isDark}
+      />
+    </>
   );
 }
 

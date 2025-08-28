@@ -313,44 +313,6 @@
     font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Cascadia Code', monospace !important;
   }
 
-  .custom-console .sp-console-list {
-    /* 消息列表样式 */
-    gap: 2px;
-  }
-
-  .custom-console .sp-console-item {
-    /* 单条消息样式 */
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    line-height: 1.4;
-    border-left: 3px solid transparent;
-  }
-
-  /* 不同类型消息的样式 */
-  .custom-console .sp-console-item[data-type="log"] {
-    background-color: var(--ls-secondary-background-color);
-    border-left-color: #6b7280;
-  }
-
-  .custom-console .sp-console-item[data-type="info"] {
-    background-color: rgba(59, 130, 246, 0.1);
-    border-left-color: #3b82f6;
-    color: #3b82f6;
-  }
-
-  .custom-console .sp-console-item[data-type="warn"] {
-    background-color: rgba(245, 158, 11, 0.1);
-    border-left-color: #f59e0b;
-    color: #f59e0b;
-  }
-
-  .custom-console .sp-console-item[data-type="error"] {
-    background-color: rgba(239, 68, 68, 0.1);
-    border-left-color: #ef4444;
-    color: #ef4444;
-  }
-
   /* 暗色主题下的控制台样式 */
   .dark .custom-console .sp-console-item[data-type="info"] {
     background-color: rgba(96, 165, 250, 0.15);
