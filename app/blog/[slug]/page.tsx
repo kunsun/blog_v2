@@ -2,6 +2,8 @@ import { CustomMDX } from "@/components/CustomMDX";
 import "./markdown.css"; // 引入 GitHub 风格 markdown 样式
 import { readdir, readFile } from "fs/promises";
 import matter from "gray-matter";
+import { unstable_ViewTransition as ViewTransition } from "react";
+import Link from "@/components/Link";
 
 export default async function Post({
   params,
@@ -23,7 +25,12 @@ export default async function Post({
 
   return (
     <article className="font-mono w-full min-w-0">
-      <h1>{data.title}</h1>
+      <Link href="/" className="text-blue-gray-500 hover:underline">
+        <div className="mt-5 text-1xl">← 返回</div>
+      </Link>
+      <ViewTransition name={`blog-title-${slug}`}>
+        <h1>{data.title}</h1>
+      </ViewTransition>
       <div className="text-[14px] text-tertiary mt-1">
         {typeof data.date === "string"
           ? data.date

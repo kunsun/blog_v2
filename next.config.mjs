@@ -10,6 +10,10 @@ const nextConfig = {
   images: { 
     unoptimized: true  // 或者可以移除这行让Vercel处理图片优化
   },
+
+  experimental: {
+    viewTransition: true,
+  },
   
   // 添加重写规则，让/resume直接访问静态HTML
   async rewrites() {

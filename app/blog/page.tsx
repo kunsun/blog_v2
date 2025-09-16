@@ -1,5 +1,7 @@
 import { getBlogPostList } from "@/db/blogs";
-import Link from "@/components/Link";
+// import Link from "@/components/Link";
+import Link from "next/link";
+import { unstable_ViewTransition as ViewTransition } from "react";
 
 export default function Post() {
   const posts = getBlogPostList();
@@ -14,9 +16,11 @@ export default function Post() {
             href={"/blog/" + decodeURIComponent(post.slug) + "/"}
           >
             <article key={post.slug} className="group my-2">
-              <div className="group-hover:underline font-[600] text-[14px]">
-                {post.metadata.title}
-              </div>
+              <ViewTransition name={`blog-title-${post.slug}`}>
+                <div className="group-hover:underline font-[600] text-[14px]">
+                  {post.metadata.title}
+                </div>
+              </ViewTransition>
               <div className="text-[13px] text-tertiary mt-1">
                 {typeof post.metadata.date === "string"
                   ? post.metadata.date
