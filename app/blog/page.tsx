@@ -2,12 +2,18 @@ import { getBlogPostList } from "@/db/blogs";
 // import Link from "@/components/Link";
 import Link from "next/link";
 import { unstable_ViewTransition as ViewTransition } from "react";
+import { H1 } from "@/components/Typography"; // 新增
 
 export default function Post() {
   const posts = getBlogPostList();
 
   return (
     <main className="font-mono pb-20 w-full min-w-0">
+      <div className="mt-6 mb-10">
+        <H1 id="blog" animateOnce>
+          Blog
+        </H1>
+      </div>
       <div className="mt-3">
         {posts.map((post) => (
           <Link
