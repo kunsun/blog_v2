@@ -8,6 +8,8 @@ import React from "react";
 import overnight from "overnight/themes/Overnight-Slumber.json";
 import { Tag } from "./Tag";
 import { Playground } from "./Playground";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 
 const components = {
   Tag,
@@ -24,6 +26,7 @@ export function CustomMDX({
   const remarkPlugins: any[] = [
     remarkSmartpants,
     remarkGfm,
+    remarkMath,
     [remarkMdxEvalCodeBlock, filename] as any,
   ];
   if (removeFirstH1) remarkPlugins.push(remarkRemoveFirstH1 as any);
@@ -42,6 +45,7 @@ export function CustomMDX({
                 theme,
               },
             ] as any,
+            rehypeKatex as any,
           ],
         },
       }}
