@@ -555,7 +555,7 @@ export const RefractionAnglesExplanation: React.FC = () => {
               </span>{" "}
               ={" "}
               <motion.span className="tabular-nums">
-                {useTransform(() => n2.get().toFixed(1))}
+                {useTransform(() => n2.get().toFixed(2))}
               </motion.span>
             </div>
           </div>
