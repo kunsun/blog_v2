@@ -3,6 +3,7 @@ import { animate, AnimationSequence } from "motion";
 import {
   AnimationPlaybackControlsWithThen,
   motion,
+  motionValue,
   type MotionValue,
   useTransform,
 } from "motion/react";
@@ -111,10 +112,18 @@ function SurfaceButtonBase({
   d,
   ringOpacity,
 }: ButtonProps & { d: string }) {
-  const activeOpacity =
+  // 创建一个默认的 MotionValue，始终调用 hook
+  const defaultMotionValue = motionValue(false);
+  const motionValueToUse =
     typeof active === "object" && active && "get" in active
-      ? useTransform(active as MotionValue<boolean>, (v) => (v ? 1 : 0))
-      : undefined;
+      ? (active as MotionValue<boolean>)
+      : defaultMotionValue;
+
+  const activeOpacity = useTransform(motionValueToUse, (v) => (v ? 1 : 0));
+
+  // 只有当 active 是 MotionValue 时才使用 activeOpacity
+  const shouldUseMotionValue =
+    typeof active === "object" && active && "get" in active;
   const activeBool = typeof active === "boolean" ? active : false;
   return (
     <button
@@ -128,10 +137,12 @@ function SurfaceButtonBase({
         className
       )}
     >
-      {(ringOpacity || activeOpacity) && (
+      {(ringOpacity || shouldUseMotionValue) && (
         <motion.span
           className="absolute inset-0 rounded-full ring-2 ring-blue-400/70 pointer-events-none"
-          style={{ opacity: (ringOpacity ?? activeOpacity)! }}
+          style={{
+            opacity: ringOpacity || (shouldUseMotionValue ? activeOpacity : 0),
+          }}
         />
       )}
       <SurfaceIcon d={d} />
