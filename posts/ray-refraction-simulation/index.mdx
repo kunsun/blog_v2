@@ -1,0 +1,351 @@
+---
+title: "光线折射仿真：透镜边缘形状对光线传播的影响"
+date: "2025-09-22"
+description: "通过交互式 SVG 动画展示不同透镜边缘形状（凸透镜、凹透镜等）对光线折射与聚焦效果的影响，深入理解光学原理"
+tags: ["Physics", "Optics", "Lens", "Refraction", "Visualization", "Motion", "Interactive"]
+---
+
+# 光线折射仿真：透镜边缘形状对光线传播的影响
+
+当平行光线穿过具有不同边缘形状的透镜时，会产生完全不同的折射效果。透镜的几何形状直接决定了光线的聚焦特性，这是光学设计的核心原理。
+
+下面这个交互式仿真展示了垂直入射光线在不同透镜边缘形状下的折射行为：
+
+<RayRefractionSimulation />
+
+## 交互操作指南
+
+### 基本操作
+- **拖动光线**：在上方区域水平拖动鼠标，改变入射光线的位置
+- **切换透镜形状**：点击下方按钮切换不同的透镜边缘轮廓
+- **重播动画**：点击右下角的重播按钮观看预设演示
+
+### 视觉元素说明
+
+| 元素 | 含义 |
+| ---- | ---- |
+| 蓝色实线（上） | 入射光线 |
+| 橙色实线（下） | 折射光线 |
+| 蓝色虚线 | 入射光线的延长线投影 |
+| 灰色区域 | 玻璃透镜主体 |
+| 底部彩色线段 | 光线在背景平面上的位移向量 |
+| 箭头 | 位移方向与强度指示器 |
+
+## 不同透镜形状的光学特性
+
+### 1. Convex Circle（凸透镜 - 圆形）
+- **几何特征**：边缘为完美圆弧，中心厚度最大
+- **光学效果**：具有强烈的聚焦能力，光线向中心会聚
+- **应用场景**：放大镜、摄影镜头、眼镜（远视矫正）
+
+### 2. Convex Squircle（凸透镜 - 方圆形）
+- **几何特征**：介于圆形和方形之间的平滑过渡
+- **光学效果**：聚焦效果比圆形透镜温和，边缘畸变较小
+- **应用场景**：高端光学系统、减少球面像差的设计
+
+### 3. Concave（凹透镜）
+- **几何特征**：边缘厚，中心薄，形成凹陷曲面
+- **光学效果**：发散光线，使平行光束扩散
+- **应用场景**：眼镜（近视矫正）、望远镜目镜、激光束扩展器
+
+### 4. Lip（唇形）
+- **几何特征**：复合曲面，结合了凸面和凹面特征
+- **光学效果**：产生复杂的光线分布，可能形成多重焦点
+- **应用场景**：特殊光学器件、艺术照明、光学实验
+
+## 折射原理解析
+
+### Snell 定律
+当光线从空气（折射率 ≈ 1）进入玻璃（折射率 ≈ 1.5）时，遵循 Snell 定律：
+
+$$n_1 \sin\theta_1 = n_2 \sin\theta_2$$
+
+其中：
+- n₁ = 1（空气）
+- n₂ = 1.5（玻璃）
+- θ₁ 是入射角
+- θ₂ 是折射角
+
+### 法线的计算
+对于任意曲面，关键是准确计算每一点的法线方向：
+
+1. **曲面方程**：y = f(x)，其中 f(x) 是边缘形状函数
+2. **切线斜率**：dy/dx = f'(x)
+3. **法线向量**：(-f'(x), 1) 经过归一化
+
+### 光线追踪算法
+
+仿真中采用的简化光线追踪算法：
+
+```typescript
+function refract(
+  normalX: number,
+  normalY: number,
+  refractiveIndex: number
+): [number, number] | null {
+  const dot = normalY * normalY;
+  const eta = 1 / refractiveIndex;
+  const k = 1 - eta * eta * (1 - dot);
+  
+  if (k < 0) {
+    // 全反射
+    return null;
+  }
+  
+  const kSqrt = Math.sqrt(k);
+  return [
+    -(eta * dot + kSqrt) * normalX,
+    eta - (eta * dot + kSqrt) * normalY
+  ];
+}
+```
+
+## 形状函数方程详解
+
+每种透镜形状都由特定的数学函数定义，这些函数将归一化坐标 x ∈ [0,1] 映射到高度值 y ∈ [0,1]：
+
+---
+
+### Convex Circle 凸圆
+
+<div className="flex items-start gap-4 mb-6">
+  <ConvexCirclePlot />
+  <div className="flex-1">
+    <div className="mb-3">$$y = \sqrt{1 - (1-x)^2}$$</div>
+    <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+      <strong>Simple circular arc → a spherical dome.</strong> Easier than the squircle, but the transition to the flat interior is harsher, producing sharper refraction edges—more noticeable when the shape is stretched away from a true circle.
+    </p>
+    <p className="text-sm text-gray-800 dark:text-gray-200">
+      简单圆弧 → 球形穹顶。比超椭圆更简单，但过渡到平坦内部的变化更剧烈，产生更尖锐的折射边缘——当形状被拉伸偏离真圆时更明显。
+    </p>
+  </div>
+</div>
+
+#### 数学原理：经典圆弧方程
+
+这是**单位圆方程** `x² + y² = 1` 在第一象限的变换形式：
+
+**变换过程**：
+1. **标准圆**：`x² + y² = 1` → `y = √(1 - x²)`
+2. **坐标平移**：将 x 替换为 (1-x) → `y = √(1 - (1-x)²)`
+
+**几何特征**：
+- **边界条件**：x=0 时 y=0，x=1 时 y=1
+- **曲率性质**：二次方程产生均匀的圆弧曲率
+- **导数特征**：`dy/dx = (1-x)/√(1-(1-x)²)`
+  - 在 x=0 处导数趋于无穷（垂直切线）
+  - 在 x=1 处导数为 0（水平切线）
+
+**光学意义**：圆形曲面提供经典的球面透镜效果，具有强烈且均匀的聚焦特性。
+
+---
+
+### Convex Squircle 凸面超椭圆
+
+<div className="flex items-start gap-4 mb-6">
+  <ConvexSquirclePlot />
+  <div className="flex-1">
+    <div className="mb-3">$$y = \sqrt[4]{1 - (1-x)^4}$$</div>
+    <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+      <strong>Uses the Squircle Apple favors:</strong> a softer flat→curve transition that keeps refraction gradients smooth even when stretched into rectangles—no harsh interior edges. It also makes the bezel appear optically thinner than its physical size because outer zones bend light less.
+    </p>
+    <p className="text-sm text-gray-800 dark:text-gray-200">
+      采用苹果偏爱的超椭圆设计：更柔和的平面→曲线过渡，即使拉伸为矩形也能保持折射梯度平滑——无尖锐的内边缘。由于外围区域对光线的弯曲较少，这也使边框在视觉上比物理尺寸更薄。
+    </p>
+  </div>
+</div>
+
+#### 数学原理：超椭圆的魅力
+
+**超椭圆族**的一般形式：`|x|ⁿ + |y|ⁿ = 1`
+
+- n = 1：菱形
+- n = 2：圆形  
+- n = 4：方圆形（Squircle）
+- n → ∞：正方形
+
+**我们的函数解析**：
+1. **标准超椭圆**：`x⁴ + y⁴ = 1` → `y = (1 - x⁴)^(1/4)`
+2. **坐标变换**：`y = (1 - (1-x)⁴)^(1/4)`
+
+**为什么是"方圆形"？**
+
+**四次幂的数学效应**：
+- **边缘区域**：当 x ≈ 0 时，(1-x)⁴ ≈ 1，函数值接近 0，形成较直的边缘
+- **中心区域**：当 x ≈ 1 时，(1-x)⁴ ≈ 0，函数值接近 1，平滑过渡
+- **中间区域**：四次幂比二次幂变化更急剧，产生更平坦的中心和更直的边缘
+
+**曲率分析**：
+- **二阶导数**在中心区域较小，边缘较大
+- 这创造了"中心平坦，边缘弯曲"的特征
+- 避免了圆形的均匀弯曲和方形的尖锐转角
+
+**工业设计价值**：苹果选择超椭圆是因为它在视觉和触觉上都提供了最佳的用户体验——既保持圆润感，又具有功能性的直边。
+
+---
+
+### Concave 凹
+
+<div className="flex items-start gap-4 mb-6">
+  <ConcavePlot />
+  <div className="flex-1">
+    <div className="mb-3">$$y = 1 - \sqrt{1 - (1-x)^2}$$</div>
+    <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+      <strong>The concave surface is the complement of the convex function,</strong> creating a bowl-like depression. This surface causes light rays to diverge outward, displacing them beyond the glass boundaries.
+    </p>
+    <p className="text-sm text-gray-800 dark:text-gray-200">
+      凹面是凸函数的补集，形成碗状凹陷。这种表面使光线向外发散，使其偏离玻璃边界之外。
+    </p>
+  </div>
+</div>
+
+#### 数学原理：补集变换的几何意义
+
+**补集操作**：`y = 1 - f_convex(x)`
+
+这是一个简单而优雅的**几何反演**：
+
+**变换效果**：
+- **高度翻转**：原来的最高点(1)变成最低点(0)
+- **形状倒置**：凸起变成凹陷
+- **对称性**：关于 y = 0.5 线对称
+
+**数学分析**：
+- **边界条件**：x=0 时 y=1（边缘最高），x=1 时 y=0（中心最低）
+- **导数关系**：`dy/dx = -d(f_convex)/dx`
+  - 导数符号相反，倾斜方向颠倒
+- **曲率性质**：曲率符号相反，凸变凹
+
+**物理直觉**：
+想象将一个凸透镜"翻转"过来，就得到了凹透镜。数学上，这个"翻转"就是补集操作 `1 - f(x)`。
+
+**光学效应**：
+- **发散特性**：光线被向外"推开"
+- **虚焦点**：产生虚像而非实像
+- **视角扩展**：增大视场角，常用于广角镜头
+
+---
+
+### Lip 唇
+
+<div className="flex items-start gap-4 mb-6">
+  <LipPlot />
+  <div className="flex-1">
+    <div className="mb-3">$$y = \text{mix}(\text{Convex}(x), \text{Concave}(x), \text{Smootherstep}(x))$$</div>
+    <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+      <strong>Blends convex and concave via Smootherstep:</strong> raised rim, shallow center dip.
+    </p>
+    <p className="text-sm text-gray-800 dark:text-gray-200">
+      通过 Smootherstep 融合凸面与凹面：形成凸起的边缘，浅凹的中心。
+    </p>
+  </div>
+</div>
+
+#### 数学原理：复合函数的艺术
+
+**混合公式**：
+$$y = f_{convex}(2x) \cdot (1-s(x)) + [f_{concave}(x) + 0.1] \cdot s(x)$$
+
+其中 **Smootherstep 函数**：
+$$s(x) = 6x^5 - 15x^4 + 10x^3$$
+
+**函数组成分析**：
+
+1. **左部分** `f_convex(2x)`：
+   - 横坐标压缩：`2x` 使函数在 [0,0.5] 完成整个变化
+   - 形成快速上升的凸起
+
+2. **右部分** `f_concave(x) + 0.1`：
+   - 凹函数加偏移：避免过深的凹陷
+   - 形成浅凹的中心区域
+
+3. **Smootherstep 插值**：
+   - **C² 连续性**：二阶导数连续，无尖锐转折
+   - **边界条件**：
+     - `s(0) = 0`：完全采用凸函数
+     - `s(1) = 1`：完全采用凹函数
+     - `s'(0) = s'(1) = 0`：端点处切线平滑
+     - `s''(0) = s''(1) = 0`：端点处曲率平滑
+
+**平滑插值的数学美学**：
+
+Smootherstep 是 **Hermite 插值** 的特殊形式：
+- 比线性插值更自然
+- 比 Cosine 插值更可控
+- 提供完美的 C² 连续性
+
+**生物学灵感**：
+这种形状模拟了人类嘴唇的轮廓：外缘丰满上翘，中心略有凹陷，整体过渡自然流畅。
+
+**应用价值**：
+- **艺术设计**：创造有机、自然的形状
+- **光学器件**：产生复杂的光线分布
+- **流体力学**：减少湍流，优化流动
+
+---
+
+### 数学可视化总结
+
+在仿真中，这些函数被巧妙地应用于透镜几何：
+
+**对称应用**：
+- **左侧**：`f(x)`，x ∈ [0,1]
+- **右侧**：`f(1-x)`，实现镜像对称
+- **中心**：平坦表面，法线垂直
+
+**函数族的统一性**：
+所有函数都满足相同的边界条件：`f(0) = 0, f(1) = 1`，确保几何连续性和光学一致性。
+
+## 技术实现亮点
+
+### 1. 动态曲面生成
+使用数学函数动态生成透镜轮廓：
+- **圆形**：`Math.sqrt(1 - (1 - x)²)`
+- **方圆形**：`(1 - (1 - x)⁴)^(1/4)`
+- **凹面**：`1 - 圆形函数`
+
+### 2. 实时物理计算
+- 每帧计算光线与曲面的交点
+- 实时计算表面法线
+- 应用 Snell 定律计算折射方向
+
+### 3. 视觉反馈系统
+- 位移强度用颜色编码
+- 线条粗细反映光学效应强度
+- 平滑的动画过渡增强用户体验
+
+### 4. 性能优化
+- 使用 MotionValue 减少不必要的重渲染
+- 预计算采样点优化路径生成
+- 智能缓存避免重复计算
+
+## 光学设计的启示
+
+这个仿真揭示了几个重要的光学设计原理：
+
+### 1. 形状决定功能
+透镜的几何形状直接决定其光学性能。微小的形状变化都会显著影响光线行为。
+
+### 2. 边缘效应
+透镜边缘区域的形状对整体性能有重要影响，这是球面像差产生的主要原因。
+
+### 3. 位移分析
+通过观察背景平面上的光线位移，可以直观理解透镜的聚焦/发散特性。
+
+### 4. 材料与几何的平衡
+实际光学设计需要在材料特性（折射率）和几何形状之间找到最佳平衡。
+
+## 延伸思考
+
+1. **像差分析**：不同形状如何影响球面像差、彗星像差等？
+2. **多元件系统**：如何组合不同形状的透镜实现复杂功能？
+3. **自适应光学**：如何动态调整透镜形状补偿大气扰动？
+4. **生物光学**：眼球晶状体的形状如何实现自动对焦？
+
+这个仿真为理解光学原理提供了直观的视觉化工具，无论是学习光学基础还是进行光学设计，都能从中获得有价值的洞察。
+
+## 相关阅读
+
+- [用交互动画理解折射角](/blog/refraction-angles-demo) - Snell 定律的深入探讨
+- 《光学原理》- Born & Wolf 经典教材
+- 现代光学设计理论与实践
