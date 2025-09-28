@@ -112,12 +112,12 @@ function refract(
   <ConvexCirclePlot />
   <div className="flex-1">
     <div className="mb-3">$$y = \sqrt{1 - (1-x)^2}$$</div>
-    <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+    <div className="text-sm text-gray-600 dark:text-gray-300 mb-3">
       <strong>Simple circular arc → a spherical dome.</strong> Easier than the squircle, but the transition to the flat interior is harsher, producing sharper refraction edges—more noticeable when the shape is stretched away from a true circle.
-    </p>
-    <p className="text-sm text-gray-800 dark:text-gray-200">
+    </div>
+    <div className="text-sm text-gray-800 dark:text-gray-200">
       简单圆弧 → 球形穹顶。比超椭圆更简单，但过渡到平坦内部的变化更剧烈，产生更尖锐的折射边缘——当形状被拉伸偏离真圆时更明显。
-    </p>
+    </div>
   </div>
 </div>
 
@@ -146,12 +146,12 @@ function refract(
   <ConvexSquirclePlot />
   <div className="flex-1">
     <div className="mb-3">$$y = \sqrt[4]{1 - (1-x)^4}$$</div>
-    <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+    <div className="text-sm text-gray-600 dark:text-gray-300 mb-3">
       <strong>Uses the Squircle Apple favors:</strong> a softer flat→curve transition that keeps refraction gradients smooth even when stretched into rectangles—no harsh interior edges. It also makes the bezel appear optically thinner than its physical size because outer zones bend light less.
-    </p>
-    <p className="text-sm text-gray-800 dark:text-gray-200">
+    </div>
+    <div className="text-sm text-gray-800 dark:text-gray-200">
       采用苹果偏爱的超椭圆设计：更柔和的平面→曲线过渡，即使拉伸为矩形也能保持折射梯度平滑——无尖锐的内边缘。由于外围区域对光线的弯曲较少，这也使边框在视觉上比物理尺寸更薄。
-    </p>
+    </div>
   </div>
 </div>
 
@@ -190,12 +190,12 @@ function refract(
   <ConcavePlot />
   <div className="flex-1">
     <div className="mb-3">$$y = 1 - \sqrt{1 - (1-x)^2}$$</div>
-    <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+    <div className="text-sm text-gray-600 dark:text-gray-300 mb-3">
       <strong>The concave surface is the complement of the convex function,</strong> creating a bowl-like depression. This surface causes light rays to diverge outward, displacing them beyond the glass boundaries.
-    </p>
-    <p className="text-sm text-gray-800 dark:text-gray-200">
+    </div>
+    <div className="text-sm text-gray-800 dark:text-gray-200">
       凹面是凸函数的补集，形成碗状凹陷。这种表面使光线向外发散，使其偏离玻璃边界之外。
-    </p>
+    </div>
   </div>
 </div>
 
@@ -232,12 +232,12 @@ function refract(
   <LipPlot />
   <div className="flex-1">
     <div className="mb-3">$$y = \text{mix}(\text{Convex}(x), \text{Concave}(x), \text{Smootherstep}(x))$$</div>
-    <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+    <div className="text-sm text-gray-600 dark:text-gray-300 mb-3">
       <strong>Blends convex and concave via Smootherstep:</strong> raised rim, shallow center dip.
-    </p>
-    <p className="text-sm text-gray-800 dark:text-gray-200">
+    </div>
+    <div className="text-sm text-gray-800 dark:text-gray-200">
       通过 Smootherstep 融合凸面与凹面：形成凸起的边缘，浅凹的中心。
-    </p>
+    </div>
   </div>
 </div>
 
