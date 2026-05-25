@@ -1,9 +1,11 @@
 import { CustomMDX } from "@/components/CustomMDX";
-import "./markdown.css"; // 引入 GitHub 风格 markdown 样式
+import "./markdown.css";
 import { readdir, readFile } from "fs/promises";
 import matter from "gray-matter";
 import { unstable_ViewTransition as ViewTransition } from "react";
 import Link from "@/components/Link";
+
+export const dynamic = "force-dynamic";
 
 export default async function Post({
   params,
@@ -15,7 +17,7 @@ export default async function Post({
   const content = await readFile(filename, "utf-8");
   let postComponents = {};
   try {
-    postComponents = await import("@posts/" + slug + "/components.js");
+    postComponents = await import(`@posts/${slug}/components.js`);
   } catch (e: any) {
     if (!e || e.code !== "MODULE_NOT_FOUND") {
       throw e;

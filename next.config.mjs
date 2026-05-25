@@ -29,14 +29,17 @@ const nextConfig = {
     ];
   },
   
-  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+  turbopack: {
+    resolveAlias: {
+      '@posts': path.join(process.cwd(), 'posts'),
+    },
+  },
+
+  webpack: (config, { dev }) => {
     config.resolve.alias['@posts'] = path.join(process.cwd(), 'posts');
-    
-    // 完全禁用CSS压缩来避免与Tailwind CSS v4的兼容性问题
     if (!dev) {
       config.optimization.minimize = false;
     }
-    
     return config;
   },
 };

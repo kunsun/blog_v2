@@ -1,8 +1,9 @@
 import { getBlogPostList } from "@/db/blogs";
-// import Link from "@/components/Link";
 import Link from "next/link";
 import { unstable_ViewTransition as ViewTransition } from "react";
-import { H1 } from "@/components/Typography"; // 新增
+import { H1 } from "@/components/Typography";
+
+export const dynamic = "force-dynamic";
 
 export default function Post() {
   const posts = getBlogPostList();
