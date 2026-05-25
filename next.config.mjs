@@ -22,6 +22,10 @@ const nextConfig = {
         source: '/book',
         destination: '/resume/index.html',
       },
+      {
+        source: '/long-image-viewer',
+        destination: '/long-image-viewer.html',
+      },
     ];
   },
   
