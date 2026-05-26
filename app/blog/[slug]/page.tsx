@@ -2,7 +2,6 @@ import { CustomMDX } from "@/components/CustomMDX";
 import "./markdown.css";
 import { readdir, readFile } from "fs/promises";
 import matter from "gray-matter";
-import { unstable_ViewTransition as ViewTransition } from "react";
 import Link from "@/components/Link";
 
 export const dynamic = "force-dynamic";
@@ -30,9 +29,7 @@ export default async function Post({
       <Link href="/" className="text-blue-gray-500 hover:underline">
         <div className="mt-5 text-1xl">← 返回</div>
       </Link>
-      <ViewTransition name={`blog-title-${slug}`}>
-        <h1>{data.title}</h1>
-      </ViewTransition>
+      <h1>{data.title}</h1>
       <div className="text-[14px] text-tertiary mt-1">
         {typeof data.date === "string"
           ? data.date
