@@ -41,8 +41,12 @@
 <body>
 
 <div class="viewer">
-  <img src="/slock-thread-2026-05-25.png" alt="Slack Thread 2026-05-25">
+  <img id="img" alt="Long Image">
 </div>
+<script>
+  const url = new URLSearchParams(location.search).get('img');
+  if (url) document.getElementById('img').src = url;
+</script>
 
 </body>
 </html>
